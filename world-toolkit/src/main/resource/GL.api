@@ -1,0 +1,7 @@
+#define DEBUG true
+
+function activeTexture(int unit)
+  @glActiveTexture()
+  if DEBUG then
+  #check("failed active texture!")
+end

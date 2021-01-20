@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.mmc1234</groupId>
 	<artifactId>world</artifactId>
 	<version>0.0.1-alpha</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>world</name>
 	<url>http://maven.apache.org</url>
@@ -17,52 +15,6 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.carrotsearch</groupId>
-			<artifactId>java-sizeof</artifactId>
-			<version>0.0.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl</artifactId>
-			<version>3.2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-opengl</artifactId>
-			<version>3.2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-glfw</artifactId>
-			<version>3.2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.joml</groupId>
-			<artifactId>joml</artifactId>
-			<version>1.9.24</version>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl</artifactId>
-			<version>3.2.2</version>
-			<classifier>natives-windows</classifier>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-glfw</artifactId>
-			<version>3.2.2</version>
-			<classifier>natives-windows</classifier>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-opengl</artifactId>
-			<version>3.2.2</version>
-			<classifier>natives-windows</classifier>
-			<scope>runtime</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -79,6 +31,18 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.6</version>
 		</dependency>
+		<dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <version>4.4</version>
+    </dependency>
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
@@ -168,4 +132,9 @@
 			<url>https://repo.spring.io/plugins-release</url>
 		</repository>
 	</repositories>
+  <modules>
+    <module>world-toolkit</module>
+    <module>world-lang</module>
+    <module>world-view</module>
+  </modules>
 </project>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.github.mmc1234</groupId>
+    <artifactId>world</artifactId>
+    <version>0.0.1-alpha</version>
+  </parent>
+  <artifactId>world-lang</artifactId>
+  <name>world-lang</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr4-runtime</artifactId>
+      <version>4.8</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr4-maven-plugin</artifactId>
+        <version>4.8</version>
+        <executions>
+          <execution>
+            <id>antlr</id>
+            <goals>
+              <goal>antlr4</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <visitor>true</visitor>
+          <listener>true</listener>
+          <outputDirectory>src/main/java</outputDirectory>
+          <treatWarningsAsErrors>true</treatWarningsAsErrors>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
