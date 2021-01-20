@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.glfw.GLFW;
 
+import com.github.mmc1234.world.toolkit.gui.DemoBatch;
 import com.github.mmc1234.world.toolkit.renderer.DefaultContext;
 import com.github.mmc1234.world.toolkit.renderer.IContext;
 import com.github.mmc1234.world.toolkit.renderer.Window;
@@ -17,7 +18,7 @@ class TestContext {
   @SneakyThrows
   void test() {
     GLFW.glfwInit();
-    IContext ctx = new DefaultContext(new Window());
+    IContext ctx = new DefaultContext(new Window(), new DemoBatch());
     Window window =ctx.getWindow();
     window.start();
     window.make();

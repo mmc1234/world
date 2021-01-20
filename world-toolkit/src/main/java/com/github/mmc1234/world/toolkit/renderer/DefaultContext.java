@@ -2,7 +2,7 @@ package com.github.mmc1234.world.toolkit.renderer;
 
 import java.util.Map;
 
-import com.github.mmc1234.world.toolkit.renderer.IRenderer;
+import com.github.mmc1234.world.toolkit.gui.IBatch;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,8 +15,5 @@ import lombok.experimental.FieldNameConstants;
 public class DefaultContext implements IContext {
 
   private @Getter @NonNull Window window;
-  @Override
-  public IRenderer getUIRenderer() {
-    return null;
-  }
+  private @Getter @NonNull IBatch batch;
 }

@@ -8,7 +8,6 @@ public class Viewport {
   protected void onWindowResize(Window window, int x, int y, int w, int h) {
 	  if(resizeListener != null) {
 	    resizeListener.onResize(window, x, y, w, h);
-	    int a = org.lwjgl.util.tootle.Tootle.TOOTLE_CCW;
 	  }
   }
   
