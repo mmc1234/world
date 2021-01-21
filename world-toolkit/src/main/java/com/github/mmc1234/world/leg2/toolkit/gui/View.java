@@ -1,9 +1,10 @@
 package com.github.mmc1234.world.leg2.toolkit.gui;
 
-
 import com.github.mmc1234.world.leg2.toolkit.Dimension2D;
 import com.github.mmc1234.world.leg2.toolkit.window.ActionType;
+import com.github.mmc1234.world.leg2.toolkit.window.ButtonType;
 import com.github.mmc1234.world.leg2.toolkit.window.ILocalContext;
+import com.google.common.collect.ImmutableList;
 
 import lombok.ToString;
 
@@ -31,24 +32,26 @@ public abstract class View {
   public void defaultSize(Dimension2D size) {
     size.set(32, 32);
   }
-  
+
   public abstract void onReshape(double x, double y, double width, double height);
 
-  public abstract void onClick(ILocalContext ctx, int x, int y, int mouseType);
+  public abstract void onClick(ILocalContext ctx, double x, double y, ButtonType buttonType);
 
-  public abstract void onLongClick(ILocalContext ctx, int x, int y, int mouseType);
+  public abstract void onLongClick(ILocalContext ctx, double x, double y, ButtonType buttonType);
 
-  public abstract void onCancelClick(ILocalContext ctx, int x, int y, int mouseType);
+  public abstract void onCancelClick(ILocalContext ctx, double x, double y, ButtonType buttonType);
 
-  public abstract void onButton(ILocalContext ctx, int x, int y, ActionType type, int mouseType);
+  public abstract void onButton(ILocalContext ctx, double x, double y, ActionType type, ButtonType buttonType,
+      int mods);
 
-  public abstract void onKey(ILocalContext ctx, ActionType type, int key, int modes);
+  public abstract void onKey(ILocalContext ctx, ActionType type, double x, double y, int key, long time, int scancode,
+      int modes);
 
-  public abstract void onInput(ILocalContext ctx, String message);
+  public abstract void onInput(ILocalContext ctx, char ch, double x,double y);
 
   public abstract void onFocusEnter(ILocalContext ctx);
 
   public abstract void onFocusExit(ILocalContext ctx);
-  
-  public abstract void onDropFile(ILocalContext ctx);
+
+  public abstract void onDropFile(ILocalContext ctx, ImmutableList<String> paths);
 }
