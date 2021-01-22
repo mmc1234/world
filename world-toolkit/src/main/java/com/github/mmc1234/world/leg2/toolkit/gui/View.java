@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public abstract class View {
   public double x, y, width, height, padTop, padBottom, padLeft, padRight;
-  public SizeType sizeType = SizeType.Auto;
+  public SizeType xType = SizeType.Auto, yType, wType, hType;
   protected double actualX, actualY, actualWidth, actualHeight;
   String background = null;
 

@@ -35,8 +35,8 @@ public class Window {
   private Window shareWindow;
 
   private String title;
-
-  private StringBuilder inputString;
+  
+  private WillClickEvent willClickEvent;
 
   protected int x, y, width, height;
 
@@ -56,7 +56,88 @@ public class Window {
     this.width = inWidth;
     this.height = inHeight;
     cursor = new Cursor(this);
+    willClickEvent = new WillClickEvent();
   }
+  
+  public void start() {
+    createWindow();
+    checkEmpty();
+
+    GLFW.glfwSetWindowSizeCallback(this.handle, (window, width, height) -> {
+      // int lastWidth = this.width;
+      // int lastHeight = this.height;
+      this.width = width;
+      this.height = height;
+    });
+    GLFW.glfwSetWindowFocusCallback(this.handle, (window, focused) -> {
+      isFocus = focused;
+    });
+    GLFW.glfwSetMouseButtonCallback(this.handle, (window, button, action, mods) -> {
+      double hx = getCursor().x, hy = getCursor().y;
+      View result = getRootView().onHit(this.context, hx, hy);
+      ButtonType buttonType = ButtonType.from(button);
+      ActionType actionType = ActionType.from(action);
+      if (result != null) {
+        if (actionType == ActionType.Press) {
+          this.holdView = result;
+          clickTime = GLFW.glfwGetTimerValue();
+        } else if (actionType == ActionType.Release) {
+          View lastHoldView = this.holdView;
+          holdView = null;
+          if (result == lastHoldView) {
+            willClickEvent.buttonType = buttonType;
+            willClickEvent.view = result;
+            willClickEvent.x = hx;
+            willClickEvent.y = hy;
+            this.context.getEventBus().post(willClickEvent);
+            if(!willClickEvent.isCancel()) {
+              result.onClick(this.context, hx, hy, buttonType);
+            }
+          } else {
+            result.onCancelClick(this.context, hx, hy, buttonType);
+          }
+        } else {
+          result.onLongClick(this.context, hx, hy, buttonType);
+        }
+        result.onButton(this.context, hx, hy, actionType, buttonType, mods);
+
+      }
+    });
+
+    GLFW.glfwSetKeyCallback(this.handle, (window, key, scancode, action, mods) -> {
+      double hx = getCursor().x, hy = getCursor().y;
+      ActionType actionType = ActionType.from(action);
+      if (actionType == ActionType.Release) {
+        keyTime = -1;
+      } else if(actionType == ActionType.Press) {
+        keyTime = GLFW.glfwGetTimerValue();
+      }
+      if(focusView!=null) {
+        focusView.onKey(this.context, actionType, hx, hy, key, GLFW.glfwGetTimerValue()-keyTime, scancode, mods);
+      }
+    });
+
+    GLFW.glfwSetCharCallback(this.handle, (window, codepoint) -> {
+      double hx = getCursor().x, hy = getCursor().y;
+      focusView.onInput(this.context, (char) codepoint, hx, hy);
+    });
+    GLFW.glfwSetCursorPosCallback(this.handle, (window, xpos, ypos) -> {
+      cursor.x = xpos;
+      cursor.y = ypos;
+    });
+    GLFW.glfwSetDropCallback(this.handle, (window, count, names) -> {
+      ImmutableList.Builder<String> paths = ImmutableList.builder();
+      for (int i = 0; i < count; i++) {
+        paths.add(GLFWDropCallback.getName(names, i));
+      }
+      double hx = getCursor().x, hy = getCursor().y;
+      View result = getRootView().onHit(this.context, hx, hy);
+      if (result != null) {
+        result.onDropFile(this.context, paths.build());
+      }
+    });
+  }
+  
 
   public void setRootView(View inRoot) {
     if (inRoot == null) {
@@ -212,78 +293,6 @@ public class Window {
     } else {
       GLFW.glfwHideWindow(this.handle);
     }
-  }
-
-  public void start() {
-    createWindow();
-    checkEmpty();
-
-    GLFW.glfwSetWindowSizeCallback(this.handle, (window, width, height) -> {
-      // int lastWidth = this.width;
-      // int lastHeight = this.height;
-      this.width = width;
-      this.height = height;
-    });
-    GLFW.glfwSetWindowFocusCallback(this.handle, (window, focused) -> {
-      isFocus = focused;
-    });
-    GLFW.glfwSetMouseButtonCallback(this.handle, (window, button, action, mods) -> {
-      double hx = getCursor().x, hy = getCursor().y;
-      View result = getRootView().onHit(this.context, hx, hy);
-      ButtonType buttonType = ButtonType.from(button);
-      ActionType actionType = ActionType.from(action);
-      if (result != null) {
-        if (actionType == ActionType.Press) {
-          this.holdView = result;
-          clickTime = GLFW.glfwGetTimerValue();
-        } else if (actionType == ActionType.Release) {
-          View lastHoldView = this.holdView;
-          holdView = null;
-          if (result == lastHoldView) {
-            result.onClick(this.context, hx, hy, buttonType);
-          } else {
-            result.onCancelClick(this.context, hx, hy, buttonType);
-          }
-        } else {
-          result.onLongClick(this.context, hx, hy, buttonType);
-        }
-        result.onButton(this.context, hx, hy, actionType, buttonType, mods);
-
-      }
-    });
-
-    GLFW.glfwSetKeyCallback(this.handle, (window, key, scancode, action, mods) -> {
-      double hx = getCursor().x, hy = getCursor().y;
-      ActionType actionType = ActionType.from(action);
-      if (actionType == ActionType.Release) {
-        keyTime = -1;
-      } else if(actionType == ActionType.Press) {
-        keyTime = GLFW.glfwGetTimerValue();
-      }
-      if(focusView!=null) {
-        focusView.onKey(this.context, actionType, hx, hy, key, GLFW.glfwGetTimerValue()-keyTime, scancode, mods);
-      }
-    });
-
-    GLFW.glfwSetCharCallback(this.handle, (window, codepoint) -> {
-      double hx = getCursor().x, hy = getCursor().y;
-      focusView.onInput(this.context, (char) codepoint, hx, hy);
-    });
-    GLFW.glfwSetCursorPosCallback(this.handle, (window, xpos, ypos) -> {
-      cursor.x = xpos;
-      cursor.y = ypos;
-    });
-    GLFW.glfwSetDropCallback(this.handle, (window, count, names) -> {
-      ImmutableList.Builder<String> paths = ImmutableList.builder();
-      for (int i = 0; i < count; i++) {
-        paths.add(GLFWDropCallback.getName(names, i));
-      }
-      double hx = getCursor().x, hy = getCursor().y;
-      View result = getRootView().onHit(this.context, hx, hy);
-      if (result != null) {
-        result.onDropFile(this.context, paths.build());
-      }
-    });
   }
 
   public void stop() {

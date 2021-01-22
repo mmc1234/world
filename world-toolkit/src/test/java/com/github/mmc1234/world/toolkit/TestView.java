@@ -2,6 +2,8 @@ package com.github.mmc1234.world.toolkit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.net.URLStreamHandlerFactory;
+
 import org.junit.jupiter.api.Test;
 import org.lwjgl.glfw.GLFW;
 
