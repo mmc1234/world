@@ -68,6 +68,11 @@
 			<version>3.2.2</version>
 			<classifier>natives-windows</classifier>
 		</dependency>
+		<dependency>
+      <groupId>com.github.mmc1234</groupId>
+      <artifactId>world-message</artifactId>
+      <version>0.0.1-alpha</version>
+    </dependency>
 
 	</dependencies>
 </project>

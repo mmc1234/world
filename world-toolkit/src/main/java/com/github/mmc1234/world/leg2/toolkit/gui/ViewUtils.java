@@ -2,6 +2,9 @@ package com.github.mmc1234.world.leg2.toolkit.gui;
 
 import com.github.mmc1234.world.leg2.toolkit.Dimension2D;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class ViewUtils {
   @SuppressWarnings("incomplete-switch")
   public static void calculate(View view, Dimension2D size, Dimension2D pos) {

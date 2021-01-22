@@ -35,17 +35,15 @@ public abstract class View {
 
   public abstract void onReshape(double x, double y, double width, double height);
 
-  public abstract void onClick(ILocalContext ctx, double x, double y, ButtonType buttonType);
+  public abstract void onClick(ClickEvent event);
 
-  public abstract void onLongClick(ILocalContext ctx, double x, double y, ButtonType buttonType);
+  public abstract void onLongClick(LongClickEvent event);
 
-  public abstract void onCancelClick(ILocalContext ctx, double x, double y, ButtonType buttonType);
+  public abstract void onCancelClick(CancelClickEvent event);
 
-  public abstract void onButton(ILocalContext ctx, double x, double y, ActionType type, ButtonType buttonType,
-      int mods);
+  public abstract void onButton(ILocalContext ctx, ActionType type, ButtonType buttonType, double x, double y, int mods);
 
-  public abstract void onKey(ILocalContext ctx, ActionType type, double x, double y, int key, long time, int scancode,
-      int modes);
+  public abstract void onKey(ILocalContext ctx, ActionType type, double x, double y, int key, long time, int scancode, int modes);
 
   public abstract void onInput(ILocalContext ctx, char ch, double x,double y);
 

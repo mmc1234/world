@@ -1,9 +1,13 @@
-package com.github.mmc1234.world.leg2.toolkit.event;
+package com.github.mmc1234.world.message;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
+@Getter
 public class Event {
-  private @Getter boolean isCancel = false;
+  private boolean isCancel = false;
+  public @Setter long time;
   
   public void setCancel(boolean isCancel) {
     this.isCancel = isCancel && canCancel();

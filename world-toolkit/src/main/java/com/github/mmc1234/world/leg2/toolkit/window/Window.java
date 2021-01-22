@@ -12,6 +12,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryUtil;
 
 import com.github.mmc1234.world.leg2.toolkit.Dimension2D;
+import com.github.mmc1234.world.leg2.toolkit.gui.ClickEvent;
 import com.github.mmc1234.world.leg2.toolkit.gui.View;
 import com.github.mmc1234.world.leg2.toolkit.gui.ViewUtils;
 import com.github.mmc1234.world.leg2.toolkit.window.listener.IWindowListener;
@@ -21,29 +22,35 @@ import com.google.common.io.CharStreams;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Value;
+import lombok.With;
+import lombok.experimental.Helper;
 
 /**
  * @author mmc1234 窗口包含了一些方法，来使用某些功能 对于某些属性，使用了监听来更新，这节约了查询开销
  */
 @Getter
 public class Window {
+  private long clickTime, keyTime;
+  protected ILocalContext context;
   private @Getter Cursor cursor;
+
   protected long handle = MemoryUtil.NULL;
+
   private boolean isFocus;
+
   private Monitor monitor;
 
+  private View rootView, focusView, holdView;
   private Window shareWindow;
-
   private String title;
-  
+
+  private WillCancelClickEvent willCancelClickEvent;
+
   private WillClickEvent willClickEvent;
+  private WillLongClickEvent willLongClickEvent;
 
   protected int x, y, width, height;
-
-  private View rootView, focusView, holdView;
-  protected ILocalContext context;
-
-  private long clickTime, keyTime;
 
   public Window() {
     this(null, null, "World", 600, 400);
@@ -57,8 +64,10 @@ public class Window {
     this.height = inHeight;
     cursor = new Cursor(this);
     willClickEvent = new WillClickEvent();
+    willCancelClickEvent = new WillCancelClickEvent();
+    willLongClickEvent = new WillLongClickEvent();
   }
-  
+
   public void start() {
     createWindow();
     checkEmpty();
@@ -77,6 +86,7 @@ public class Window {
       View result = getRootView().onHit(this.context, hx, hy);
       ButtonType buttonType = ButtonType.from(button);
       ActionType actionType = ActionType.from(action);
+
       if (result != null) {
         if (actionType == ActionType.Press) {
           this.holdView = result;
@@ -85,22 +95,18 @@ public class Window {
           View lastHoldView = this.holdView;
           holdView = null;
           if (result == lastHoldView) {
-            willClickEvent.buttonType = buttonType;
-            willClickEvent.view = result;
-            willClickEvent.x = hx;
-            willClickEvent.y = hy;
+            willClickEvent.setEvent(new ClickEvent(this, hx, hy, buttonType));
             this.context.getEventBus().post(willClickEvent);
-            if(!willClickEvent.isCancel()) {
-              result.onClick(this.context, hx, hy, buttonType);
+            if (!willClickEvent.isCancel()) {
+              result.onClick(willClickEvent.getEvent());
             }
           } else {
-            result.onCancelClick(this.context, hx, hy, buttonType);
+            result.onCancelClick(willCancelClickEvent.getEvent());
           }
         } else {
-          result.onLongClick(this.context, hx, hy, buttonType);
+          result.onLongClick(willLongClickEvent.getEvent());
         }
-        result.onButton(this.context, hx, hy, actionType, buttonType, mods);
-
+        result.onButton(this.context, actionType, buttonType, hx, hy, mods);
       }
     });
 
@@ -109,11 +115,11 @@ public class Window {
       ActionType actionType = ActionType.from(action);
       if (actionType == ActionType.Release) {
         keyTime = -1;
-      } else if(actionType == ActionType.Press) {
+      } else if (actionType == ActionType.Press) {
         keyTime = GLFW.glfwGetTimerValue();
       }
-      if(focusView!=null) {
-        focusView.onKey(this.context, actionType, hx, hy, key, GLFW.glfwGetTimerValue()-keyTime, scancode, mods);
+      if (focusView != null) {
+        focusView.onKey(this.context, actionType, hx, hy, key, GLFW.glfwGetTimerValue() - keyTime, scancode, mods);
       }
     });
 
@@ -138,29 +144,6 @@ public class Window {
     });
   }
   
-
-  public void setRootView(View inRoot) {
-    if (inRoot == null) {
-      rootView = null;
-    } else if (inRoot != rootView) {
-      rootView = inRoot;
-      Dimension2D size = new Dimension2D(width, height), pos = new Dimension2D(0, 0);
-      rootView.calculate(size, pos);
-      ViewUtils.reshape(rootView, pos.x, pos.y, size.x, size.y);
-    }
-  }
-
-  public void setFocusView(View inFocus) {
-    View lastFocus = focusView;
-    if (lastFocus != null) {
-      lastFocus.onFocusExit(this.context);
-    }
-    if (inFocus != null) {
-      inFocus.onFocusEnter(this.context);
-    }
-    focusView = inFocus;
-  }
-
   public void checkEmpty() {
     if (isEmpty()) {
       throw new RuntimeException("Empty window");
@@ -231,6 +214,17 @@ public class Window {
     GLFW.glfwSetWindowAttrib(this.handle, GLFW.GLFW_FOCUS_ON_SHOW, isEnable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
   }
 
+  public void setFocusView(View inFocus) {
+    View lastFocus = focusView;
+    if (lastFocus != null) {
+      lastFocus.onFocusExit(this.context);
+    }
+    if (inFocus != null) {
+      inFocus.onFocusEnter(this.context);
+    }
+    focusView = inFocus;
+  }
+
   public void setLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {
     checkEmpty();
     GLFW.glfwSetWindowSizeLimits(this.handle, minWidth, minHeight, maxWidth, maxHeight);
@@ -270,6 +264,17 @@ public class Window {
   public void setResizable(boolean isEnable) {
     checkEmpty();
     GLFW.glfwSetWindowAttrib(this.handle, GLFW.GLFW_RESIZABLE, isEnable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+  }
+
+  public void setRootView(View inRoot) {
+    if (inRoot == null) {
+      rootView = null;
+    } else if (inRoot != rootView) {
+      rootView = inRoot;
+      Dimension2D size = new Dimension2D(width, height), pos = new Dimension2D(0, 0);
+      rootView.calculate(size, pos);
+      ViewUtils.reshape(rootView, pos.x, pos.y, size.x, size.y);
+    }
   }
 
   public void setShouldClose(boolean shouldClose) {
