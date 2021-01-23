@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-class Subscriber {
+public class Subscriber {
   public Object obj;
   public Method method;
   
@@ -26,10 +26,5 @@ class Subscriber {
       }
     }
     return false;
-  }
-  
-  @Override
-  public int hashCode() {
-    return obj.hashCode();
   }
 }
