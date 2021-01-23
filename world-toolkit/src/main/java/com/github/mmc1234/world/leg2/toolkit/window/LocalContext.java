@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 
 import com.github.mmc1234.world.leg2.toolkit.gui.IBatch;
+import com.github.mmc1234.world.message.CancelableEventBus;
 import com.google.common.eventbus.EventBus;
 
 import lombok.Getter;
@@ -12,11 +13,11 @@ public class LocalContext implements ILocalContext {
 
   private @Getter Window currentWindow;
   private @Getter IBatch batch;
-  private @Getter EventBus eventBus;
+  private @Getter CancelableEventBus eventBus;
   
   public LocalContext(IBatch inBatch) {
     this.batch = inBatch;
-    eventBus = new EventBus("Local-Context"+Thread.currentThread());
+    eventBus = new CancelableEventBus("Local-Context"+Thread.currentThread());
   }
 
   @Override

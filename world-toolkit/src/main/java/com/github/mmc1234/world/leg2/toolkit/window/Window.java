@@ -32,10 +32,10 @@ import lombok.experimental.Helper;
 @Getter
 public class Window {
   private long clickTime, keyTime;
-  protected ILocalContext context;
+  private ILocalContext context;
   private @Getter Cursor cursor;
 
-  protected long handle = MemoryUtil.NULL;
+  private long handle = MemoryUtil.NULL;
 
   private boolean isFocus;
 
@@ -50,7 +50,7 @@ public class Window {
   private WillClickEvent willClickEvent;
   private WillLongClickEvent willLongClickEvent;
 
-  protected int x, y, width, height;
+  private int x, y, width, height;
 
   public Window() {
     this(null, null, "World", 600, 400);
@@ -68,88 +68,12 @@ public class Window {
     willLongClickEvent = new WillLongClickEvent();
   }
 
-  public void start() {
-    createWindow();
-    checkEmpty();
-
-    GLFW.glfwSetWindowSizeCallback(this.handle, (window, width, height) -> {
-      // int lastWidth = this.width;
-      // int lastHeight = this.height;
-      this.width = width;
-      this.height = height;
-    });
-    GLFW.glfwSetWindowFocusCallback(this.handle, (window, focused) -> {
-      isFocus = focused;
-    });
-    GLFW.glfwSetMouseButtonCallback(this.handle, (window, button, action, mods) -> {
-      double hx = getCursor().x, hy = getCursor().y;
-      View result = getRootView().onHit(this.context, hx, hy);
-      ButtonType buttonType = ButtonType.from(button);
-      ActionType actionType = ActionType.from(action);
-
-      if (result != null) {
-        if (actionType == ActionType.Press) {
-          this.holdView = result;
-          clickTime = GLFW.glfwGetTimerValue();
-        } else if (actionType == ActionType.Release) {
-          View lastHoldView = this.holdView;
-          holdView = null;
-          if (result == lastHoldView) {
-            willClickEvent.setEvent(new ClickEvent(this, hx, hy, buttonType));
-            this.context.getEventBus().post(willClickEvent);
-            if (!willClickEvent.isCancel()) {
-              result.onClick(willClickEvent.getEvent());
-            }
-          } else {
-            result.onCancelClick(willCancelClickEvent.getEvent());
-          }
-        } else {
-          result.onLongClick(willLongClickEvent.getEvent());
-        }
-        result.onButton(this.context, actionType, buttonType, hx, hy, mods);
-      }
-    });
-
-    GLFW.glfwSetKeyCallback(this.handle, (window, key, scancode, action, mods) -> {
-      double hx = getCursor().x, hy = getCursor().y;
-      ActionType actionType = ActionType.from(action);
-      if (actionType == ActionType.Release) {
-        keyTime = -1;
-      } else if (actionType == ActionType.Press) {
-        keyTime = GLFW.glfwGetTimerValue();
-      }
-      if (focusView != null) {
-        focusView.onKey(this.context, actionType, hx, hy, key, GLFW.glfwGetTimerValue() - keyTime, scancode, mods);
-      }
-    });
-
-    GLFW.glfwSetCharCallback(this.handle, (window, codepoint) -> {
-      double hx = getCursor().x, hy = getCursor().y;
-      focusView.onInput(this.context, (char) codepoint, hx, hy);
-    });
-    GLFW.glfwSetCursorPosCallback(this.handle, (window, xpos, ypos) -> {
-      cursor.x = xpos;
-      cursor.y = ypos;
-    });
-    GLFW.glfwSetDropCallback(this.handle, (window, count, names) -> {
-      ImmutableList.Builder<String> paths = ImmutableList.builder();
-      for (int i = 0; i < count; i++) {
-        paths.add(GLFWDropCallback.getName(names, i));
-      }
-      double hx = getCursor().x, hy = getCursor().y;
-      View result = getRootView().onHit(this.context, hx, hy);
-      if (result != null) {
-        result.onDropFile(this.context, paths.build());
-      }
-    });
-  }
-  
   public void checkEmpty() {
     if (isEmpty()) {
       throw new RuntimeException("Empty window");
     }
   }
-
+  
   protected void createWindow() {
     if (isEmpty()) {
       handle = GLFW.glfwCreateWindow(width, height, title, (monitor == null ? MemoryUtil.NULL : monitor.handle),
@@ -298,6 +222,82 @@ public class Window {
     } else {
       GLFW.glfwHideWindow(this.handle);
     }
+  }
+
+  public void start() {
+    createWindow();
+    checkEmpty();
+
+    GLFW.glfwSetWindowSizeCallback(this.handle, (window, width, height) -> {
+      // int lastWidth = this.width;
+      // int lastHeight = this.height;
+      this.width = width;
+      this.height = height;
+    });
+    GLFW.glfwSetWindowFocusCallback(this.handle, (window, focused) -> {
+      isFocus = focused;
+    });
+    GLFW.glfwSetMouseButtonCallback(this.handle, (window, button, action, mods) -> {
+      double hx = getCursor().x, hy = getCursor().y;
+      View result = getRootView().onHit(this.context, hx, hy);
+      ButtonType buttonType = ButtonType.from(button);
+      ActionType actionType = ActionType.from(action);
+
+      if (result != null) {
+        if (actionType == ActionType.Press) {
+          this.holdView = result;
+          clickTime = GLFW.glfwGetTimerValue();
+        } else if (actionType == ActionType.Release) {
+          View lastHoldView = this.holdView;
+          holdView = null;
+          if (result == lastHoldView) {
+            willClickEvent.setEvent(new ClickEvent(this, hx, hy, buttonType));
+            this.context.getEventBus().post(willClickEvent);
+            if (!willClickEvent.isCancel()) {
+              result.onClick(willClickEvent.getEvent());
+            }
+          } else {
+            result.onCancelClick(willCancelClickEvent.getEvent());
+          }
+        } else {
+          result.onLongClick(willLongClickEvent.getEvent());
+        }
+        result.onButton(this.context, actionType, buttonType, hx, hy, mods);
+      }
+    });
+
+    GLFW.glfwSetKeyCallback(this.handle, (window, key, scancode, action, mods) -> {
+      double hx = getCursor().x, hy = getCursor().y;
+      ActionType actionType = ActionType.from(action);
+      if (actionType == ActionType.Release) {
+        keyTime = -1;
+      } else if (actionType == ActionType.Press) {
+        keyTime = GLFW.glfwGetTimerValue();
+      }
+      if (focusView != null) {
+        focusView.onKey(this.context, actionType, hx, hy, key, GLFW.glfwGetTimerValue() - keyTime, scancode, mods);
+      }
+    });
+
+    GLFW.glfwSetCharCallback(this.handle, (window, codepoint) -> {
+      double hx = getCursor().x, hy = getCursor().y;
+      focusView.onInput(this.context, (char) codepoint, hx, hy);
+    });
+    GLFW.glfwSetCursorPosCallback(this.handle, (window, xpos, ypos) -> {
+      cursor.x = xpos;
+      cursor.y = ypos;
+    });
+    GLFW.glfwSetDropCallback(this.handle, (window, count, names) -> {
+      ImmutableList.Builder<String> paths = ImmutableList.builder();
+      for (int i = 0; i < count; i++) {
+        paths.add(GLFWDropCallback.getName(names, i));
+      }
+      double hx = getCursor().x, hy = getCursor().y;
+      View result = getRootView().onHit(this.context, hx, hy);
+      if (result != null) {
+        result.onDropFile(this.context, paths.build());
+      }
+    });
   }
 
   public void stop() {
