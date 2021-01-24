@@ -1,6 +1,5 @@
 package com.github.mmc1234.world.message;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 
 import lombok.AllArgsConstructor;

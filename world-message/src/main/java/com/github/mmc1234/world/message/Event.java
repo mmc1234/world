@@ -1,8 +1,5 @@
 package com.github.mmc1234.world.message;
 
-import com.google.common.eventbus.Subscribe;
-
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 

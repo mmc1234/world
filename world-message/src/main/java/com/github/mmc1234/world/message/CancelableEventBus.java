@@ -2,7 +2,6 @@ package com.github.mmc1234.world.message;
 
 import java.lang.reflect.Method;
 
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 public class CancelableEventBus {

@@ -238,6 +238,9 @@ public class Window {
       isFocus = focused;
     });
     GLFW.glfwSetMouseButtonCallback(this.handle, (window, button, action, mods) -> {
+      if(getRootView() == null) {
+        return;
+      }
       double hx = getCursor().x, hy = getCursor().y;
       View result = getRootView().onHit(this.context, hx, hy);
       ButtonType buttonType = ButtonType.from(button);
