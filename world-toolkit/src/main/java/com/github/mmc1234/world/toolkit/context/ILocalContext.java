@@ -1,7 +1,8 @@
-package com.github.mmc1234.world.toolkit.window;
+package com.github.mmc1234.world.toolkit.context;
 
 import com.github.mmc1234.world.message.CancelableEventBus;
 import com.github.mmc1234.world.toolkit.renderer.UIRenderer;
+import com.github.mmc1234.world.toolkit.window.Window;
 
 public interface ILocalContext {
   public UIRenderer getRenderer();

@@ -4,8 +4,15 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWDropCallback;
 import org.lwjgl.system.MemoryUtil;
 
+import com.github.mmc1234.world.message.EditableQueryEvent;
+import com.github.mmc1234.world.message.QueryEvent;
 import com.github.mmc1234.world.toolkit.Dimension2D;
-import com.github.mmc1234.world.toolkit.gui.ClickEvent;
+import com.github.mmc1234.world.toolkit.context.ILocalContext;
+import com.github.mmc1234.world.toolkit.enumerate.ActionType;
+import com.github.mmc1234.world.toolkit.enumerate.ButtonType;
+import com.github.mmc1234.world.toolkit.event.CancelClickEvent;
+import com.github.mmc1234.world.toolkit.event.ClickEvent;
+import com.github.mmc1234.world.toolkit.event.LongClickEvent;
 import com.github.mmc1234.world.toolkit.gui.View;
 import com.github.mmc1234.world.toolkit.gui.ViewUtils;
 import com.google.common.collect.ImmutableList;
@@ -13,32 +20,27 @@ import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 
 /**
- * @author mmc1234 窗口包含了一些方法，来使用某些功能 对于某些属性，使用了监听来更新，这节约了查询开销
+ * @author mmc1234 窗口减肥了，啧啧
  */
 @Getter
-public class Window {
-  private long clickTime, keyTime;
+public final class Window {
+  protected int[] buf1 = new int[1], buf2 = new int[1];
+  private long clickTime, keyTime, handle = MemoryUtil.NULL;
   private ILocalContext context;
+  protected boolean isFocus;
   private @Getter Cursor cursor;
-
-  private long handle = MemoryUtil.NULL;
-
-  private boolean isFocus;
-
-  private Monitor monitor;
-
+  protected Monitor monitor;
+  private EditableQueryEvent queryEvent;
   private View rootView, focusView, holdView;
   private Window shareWindow;
-  private String title;
-
-  private WillCancelClickEvent willCancelClickEvent;
-
-  private WillClickEvent willClickEvent;
-  private WillLongClickEvent willLongClickEvent;
-
-  private int x, y, width, height;
+  protected String title;
+  protected int x, y, width, height;
 
   public Window() {
+    this("World", 600, 400);
+  }
+
+  public Window(String inTitle, int inWidth, int inHeight) {
     this(null, null, "World", 600, 400);
   }
 
@@ -49,9 +51,7 @@ public class Window {
     this.width = inWidth;
     this.height = inHeight;
     cursor = new Cursor(this);
-    willClickEvent = new WillClickEvent();
-    willCancelClickEvent = new WillCancelClickEvent();
-    willLongClickEvent = new WillLongClickEvent();
+    queryEvent = new EditableQueryEvent();
   }
 
   public void checkEmpty() {
@@ -59,7 +59,7 @@ public class Window {
       throw new RuntimeException("Empty window");
     }
   }
-  
+
   protected void createWindow() {
     if (isEmpty()) {
       handle = GLFW.glfwCreateWindow(width, height, title, (monitor == null ? MemoryUtil.NULL : monitor.handle),
@@ -71,57 +71,12 @@ public class Window {
     GLFW.glfwFocusWindow(this.handle);
   }
 
-  public String getClipString() {
-    checkEmpty();
-    return GLFW.glfwGetClipboardString(this.handle);
-  }
-
-  public float getOpacity() {
-    checkEmpty();
-    return GLFW.glfwGetWindowOpacity(this.handle);
-  }
-
   public boolean isEmpty() {
     return this.handle == MemoryUtil.NULL;
   }
 
   public boolean isShouldClose() {
     return isEmpty() || GLFW.glfwWindowShouldClose(this.handle);
-  }
-
-  public boolean isVisable() {
-    checkEmpty();
-    return GLFW.glfwGetWindowAttrib(this.handle, GLFW.GLFW_VISIBLE) == GLFW.GLFW_TRUE;
-  }
-
-  public void restore() {
-    checkEmpty();
-    GLFW.glfwRestoreWindow(this.handle);
-  }
-
-  public void setAutoIconify(boolean isEnable) {
-    checkEmpty();
-    GLFW.glfwSetWindowAttrib(this.handle, GLFW.GLFW_AUTO_ICONIFY, isEnable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
-  }
-
-  public void setClipString(String message) {
-    checkEmpty();
-    GLFW.glfwSetClipboardString(this.handle, message);
-  }
-
-  public void setDecorated(boolean isEnable) {
-    checkEmpty();
-    GLFW.glfwSetWindowAttrib(this.handle, GLFW.GLFW_DECORATED, isEnable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
-  }
-
-  public void setFloating(boolean isEnable) {
-    checkEmpty();
-    GLFW.glfwSetWindowAttrib(this.handle, GLFW.GLFW_FLOATING, isEnable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
-  }
-
-  public void setFocusOnShow(boolean isEnable) {
-    checkEmpty();
-    GLFW.glfwSetWindowAttrib(this.handle, GLFW.GLFW_FOCUS_ON_SHOW, isEnable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
   }
 
   public void setFocusView(View inFocus) {
@@ -133,47 +88,6 @@ public class Window {
       inFocus.onFocusEnter(this.context);
     }
     focusView = inFocus;
-  }
-
-  public void setLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {
-    checkEmpty();
-    GLFW.glfwSetWindowSizeLimits(this.handle, minWidth, minHeight, maxWidth, maxHeight);
-  }
-
-  public void setMaximize() {
-    checkEmpty();
-    GLFW.glfwMaximizeWindow(this.handle);
-  }
-
-  public void setMinimize() {
-    checkEmpty();
-    GLFW.glfwIconifyWindow(this.handle);
-  }
-
-  public void setMonitor(Monitor monitor, int refreshRate) {
-    checkEmpty();
-    this.monitor = monitor;
-    GLFW.glfwSetWindowMonitor(this.handle, monitor.handle, x, y, width, height, refreshRate);
-  }
-
-  public void setOpacity(float inOpacity) {
-    checkEmpty();
-    GLFW.glfwSetWindowOpacity(this.handle, inOpacity);
-  }
-
-  public void setPosition(int x, int y) {
-    checkEmpty();
-    GLFW.glfwSetWindowPos(this.handle, x, y);
-  }
-
-  public void setRatio(int numer, int denom) {
-    checkEmpty();
-    GLFW.glfwSetWindowAspectRatio(this.handle, numer, denom);
-  }
-
-  public void setResizable(boolean isEnable) {
-    checkEmpty();
-    GLFW.glfwSetWindowAttrib(this.handle, GLFW.GLFW_RESIZABLE, isEnable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
   }
 
   public void setRootView(View inRoot) {
@@ -191,32 +105,10 @@ public class Window {
     GLFW.glfwSetWindowShouldClose(this.handle, shouldClose);
   }
 
-  public void setSize(int w, int h) {
-    checkEmpty();
-    GLFW.glfwSetWindowSize(this.handle, w, h);
-  }
-
-  public void setTitle(String inTitle) {
-    checkEmpty();
-    GLFW.glfwSetWindowTitle(this.handle, (this.title = inTitle));
-  }
-
-  public void setVisable(boolean isVisable) {
-    checkEmpty();
-    if (isVisable) {
-      GLFW.glfwShowWindow(this.handle);
-    } else {
-      GLFW.glfwHideWindow(this.handle);
-    }
-  }
-
   public void start() {
     createWindow();
     checkEmpty();
-
     GLFW.glfwSetWindowSizeCallback(this.handle, (window, width, height) -> {
-      // int lastWidth = this.width;
-      // int lastHeight = this.height;
       this.width = width;
       this.height = height;
     });
@@ -224,7 +116,7 @@ public class Window {
       isFocus = focused;
     });
     GLFW.glfwSetMouseButtonCallback(this.handle, (window, button, action, mods) -> {
-      if(getRootView() == null) {
+      if (getRootView() == null) {
         return;
       }
       double hx = getCursor().x, hy = getCursor().y;
@@ -232,24 +124,30 @@ public class Window {
       ButtonType buttonType = ButtonType.from(button);
       ActionType actionType = ActionType.from(action);
 
+      View lastHoldView = this.holdView;
+
       if (result != null) {
         if (actionType == ActionType.Press) {
           this.holdView = result;
           clickTime = GLFW.glfwGetTimerValue();
         } else if (actionType == ActionType.Release) {
-          View lastHoldView = this.holdView;
           holdView = null;
           if (result == lastHoldView) {
-            willClickEvent.setEvent(new ClickEvent(this, hx, hy, buttonType));
-            this.context.getEventBus().post(willClickEvent);
-            if (!willClickEvent.isCancel()) {
-              result.onClick(willClickEvent.getEvent());
+            queryEvent.setEvent(new ClickEvent(this, hx, hy, buttonType));
+            this.context.getEventBus().post(queryEvent);
+            if (!queryEvent.getEvent().isCancel()) {
+              result.onClick((ClickEvent) queryEvent.getEvent());
             }
           } else {
-            result.onCancelClick(willCancelClickEvent.getEvent());
+            queryEvent.setEvent(new CancelClickEvent(this, hx, hy, buttonType, lastHoldView));
+            this.context.getEventBus().post(queryEvent);
+            if (!queryEvent.getEvent().isCancel()) {result.onCancelClick((CancelClickEvent) queryEvent.getEvent());
+            }
           }
         } else {
-          result.onLongClick(willLongClickEvent.getEvent());
+          queryEvent.setEvent(new LongClickEvent(this, hx, hy, buttonType, lastHoldView));
+          this.context.getEventBus().post(queryEvent);
+          result.onLongClick((LongClickEvent) queryEvent.getEvent());
         }
         result.onButton(this.context, actionType, buttonType, hx, hy, mods);
       }
@@ -287,6 +185,12 @@ public class Window {
         result.onDropFile(this.context, paths.build());
       }
     });
+    GLFW.glfwGetWindowPos(this.handle, buf1, buf2);
+    this.x = buf1[0];
+    this.y = buf2[0];
+    GLFW.glfwGetWindowSize(this.handle, buf1, buf2);
+    this.width = buf1[0];
+    this.height = buf2[0];
   }
 
   public void stop() {

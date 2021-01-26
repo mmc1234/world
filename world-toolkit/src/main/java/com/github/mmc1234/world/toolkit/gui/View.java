@@ -1,9 +1,13 @@
 package com.github.mmc1234.world.toolkit.gui;
 
 import com.github.mmc1234.world.toolkit.Dimension2D;
-import com.github.mmc1234.world.toolkit.window.ActionType;
-import com.github.mmc1234.world.toolkit.window.ButtonType;
-import com.github.mmc1234.world.toolkit.window.ILocalContext;
+import com.github.mmc1234.world.toolkit.context.ILocalContext;
+import com.github.mmc1234.world.toolkit.enumerate.ActionType;
+import com.github.mmc1234.world.toolkit.enumerate.ButtonType;
+import com.github.mmc1234.world.toolkit.enumerate.SizeType;
+import com.github.mmc1234.world.toolkit.event.CancelClickEvent;
+import com.github.mmc1234.world.toolkit.event.ClickEvent;
+import com.github.mmc1234.world.toolkit.event.LongClickEvent;
 import com.google.common.collect.ImmutableList;
 
 import lombok.ToString;
@@ -11,7 +15,7 @@ import lombok.ToString;
 @ToString
 public abstract class View {
   public double x, y, width, height, padTop, padBottom, padLeft, padRight;
-  public SizeType xType = SizeType.Auto, yType, wType, hType;
+  public SizeType xType = SizeType.Auto, yType = SizeType.Auto, wType = SizeType.Auto, hType = SizeType.Auto;
   protected double actualX, actualY, actualWidth, actualHeight;
   String background = null;
 
@@ -32,10 +36,12 @@ public abstract class View {
   public void defaultSize(Dimension2D size) {
     size.set(32, 32);
   }
+  
+  public void onClick(ClickEvent event) {
+    event.getWindow().setFocusView(this);
+  }
 
   public abstract void onReshape(double x, double y, double width, double height);
-
-  public abstract void onClick(ClickEvent event);
 
   public abstract void onLongClick(LongClickEvent event);
 

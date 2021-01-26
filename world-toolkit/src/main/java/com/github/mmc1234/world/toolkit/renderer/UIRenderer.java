@@ -1,12 +1,8 @@
 package com.github.mmc1234.world.toolkit.renderer;
 
-import java.io.Closeable;
-import java.io.IOException;
-
-import javax.sound.midi.Track;
-
+import com.github.mmc1234.world.toolkit.context.ILocalContext;
+import com.github.mmc1234.world.toolkit.enumerate.EnumPass;
 import com.github.mmc1234.world.toolkit.gui.View;
-import com.github.mmc1234.world.toolkit.window.ILocalContext;
 
 import lombok.NonNull;
 
@@ -23,6 +19,10 @@ public class UIRenderer {
     }
   }
   
+  public void enter(View view, EnumPass pass) {
+    this.enter(view, pass.ordinal());
+  }
+  
   public void enter(View view, int pass) {
     if(pass>passArray.length) {
       throw new IndexOutOfBoundsException("pass index out of bounds.");
@@ -35,7 +35,7 @@ public class UIRenderer {
     trackArray[index].view = view;
     trackArray[index].pass = pass;
     trackArray[index].z = (255-index)/256D;
-    passArray[pass].trackList.add(trackArray[index]);
+    passArray[pass].trackList.add(trackArray[index].clone());
     index++;
   }
   public void exit(View view) {
@@ -44,19 +44,39 @@ public class UIRenderer {
       trackArray[index].view = null;
     }
   }
+  
+  public void setPass(int index, Pass pass) {
+    if(index>passArray.length) {
+      throw new IndexOutOfBoundsException("pass index out of bounds.");
+    }
+    passArray[index] = pass;
+  }
+  
+  public void setPass(EnumPass index, Pass pass) {
+    this.setPass(index.ordinal(), pass);
+  }
 
-  protected void render(@NonNull ILocalContext context) {
+  public void render(@NonNull ILocalContext context) {
     View root = context.getCurrentWindow().getRootView();
     if(root != null) {
       root.onPreRender(context);
     }
     for(Pass pass : passArray) {
+      if(pass == null) {
+        continue;
+      }
       pass.offset = uniformBuffer.request(pass.calculateUniformBufferSize());
     }
     for(Pass pass : passArray) {
+      if(pass == null) {
+        continue;
+      }
       pass.preRender(context); // 提交一些数据
     }
     for(Pass pass : passArray) {
+      if(pass == null) {
+        continue;
+      }
       pass.render(context, uniformBuffer); // 渲染
     }
   }

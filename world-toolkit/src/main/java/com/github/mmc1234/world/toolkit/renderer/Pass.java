@@ -2,8 +2,7 @@ package com.github.mmc1234.world.toolkit.renderer;
 
 import java.util.ArrayList;
 
-import com.github.mmc1234.world.toolkit.gui.View;
-import com.github.mmc1234.world.toolkit.window.ILocalContext;
+import com.github.mmc1234.world.toolkit.context.ILocalContext;
 
 abstract class Pass {
   int offset;

@@ -52,7 +52,7 @@ public class ViewUtils {
   }
   
   public static void reshape(View view, double x, double y, double w, double h) {
-    if(view.actualX != x && view.actualY != y && view.actualWidth != w && view.actualHeight != h) {
+    if(view.actualX != x || view.actualY != y || view.actualWidth != w || view.actualHeight != h) {
       view.actualX = x;
       view.actualY = y;
       view.actualWidth = w;

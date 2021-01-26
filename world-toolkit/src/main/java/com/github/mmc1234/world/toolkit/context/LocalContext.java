@@ -1,10 +1,12 @@
-package com.github.mmc1234.world.toolkit.window;
+package com.github.mmc1234.world.toolkit.context;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 
 import com.github.mmc1234.world.message.CancelableEventBus;
+import com.github.mmc1234.world.toolkit.renderer.DirectUniformBufferExt;
 import com.github.mmc1234.world.toolkit.renderer.UIRenderer;
+import com.github.mmc1234.world.toolkit.window.Window;
 
 import lombok.Getter;
 
@@ -15,11 +17,7 @@ public class LocalContext implements ILocalContext {
   private @Getter CancelableEventBus eventBus;
   
   public LocalContext() {
-    this(null);
-  }
-  
-  public LocalContext(UIRenderer renderer) {
-    this.renderer = renderer;
+    this.renderer = new UIRenderer(new DirectUniformBufferExt());
     eventBus = new CancelableEventBus("Local-Context"+Thread.currentThread());
   }
 
