@@ -22,7 +22,7 @@ class TestRender {
   @SneakyThrows
   void test() {
     GLFW.glfwInit();
-    ILocalContext ctx = new LocalContext(null);
+    ILocalContext ctx = new LocalContext();
     Window window = new Window(null, null, "Render Base", 800, 600);
     window.start();
 
@@ -83,7 +83,7 @@ class TestRender {
   @SneakyThrows
   void testClip() {
     GLFW.glfwInit();
-    ILocalContext ctx = new LocalContext(null);
+    ILocalContext ctx = new LocalContext();
     Window window = new Window(null, null, "Render Clip", 800, 600);
     window.start();
 

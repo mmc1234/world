@@ -3,7 +3,7 @@ package com.github.mmc1234.world.leg2.toolkit.window;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 
-import com.github.mmc1234.world.leg2.toolkit.gui.IBatch;
+import com.github.mmc1234.world.leg2.toolkit.gui.render.UIRenderer;
 import com.github.mmc1234.world.message.CancelableEventBus;
 import com.google.common.eventbus.EventBus;
 
@@ -12,11 +12,11 @@ import lombok.Getter;
 public class LocalContext implements ILocalContext {
 
   private @Getter Window currentWindow;
-  private @Getter IBatch batch;
+  private @Getter UIRenderer renderer;
   private @Getter CancelableEventBus eventBus;
   
-  public LocalContext(IBatch inBatch) {
-    this.batch = inBatch;
+  public LocalContext() {
+    renderer = new UIRenderer();
     eventBus = new CancelableEventBus("Local-Context"+Thread.currentThread());
   }
 

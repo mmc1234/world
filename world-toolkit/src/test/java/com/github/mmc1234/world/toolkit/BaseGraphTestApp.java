@@ -22,7 +22,8 @@ import lombok.SneakyThrows;
 public abstract class BaseGraphTestApp implements Runnable {
   public final void run() {
     GLFW.glfwInit();
-    ILocalContext ctx = new LocalContext(null);
+    ILocalContext ctx = new LocalContext();
+    //GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 4);
     Window window = new Window(null, null, "Render UI-0.1", 800, 600);
     window.start();
     

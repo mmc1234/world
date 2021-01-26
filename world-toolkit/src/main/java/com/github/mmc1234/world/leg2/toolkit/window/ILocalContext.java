@@ -1,11 +1,11 @@
 package com.github.mmc1234.world.leg2.toolkit.window;
 
-import com.github.mmc1234.world.leg2.toolkit.gui.IBatch;
+import com.github.mmc1234.world.leg2.toolkit.gui.render.UIRenderer;
 import com.github.mmc1234.world.message.CancelableEventBus;
 import com.google.common.eventbus.EventBus;
 
 public interface ILocalContext {
-  public IBatch getBatch();
+  public UIRenderer getRenderer();
   public Window getCurrentWindow();
   public CancelableEventBus getEventBus();
   public void loadGL();

@@ -5,5 +5,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UIMesh {
   public float[] pos;
-  public int x, y, x1, y1;
+  public final float[] clip, rect;
+  public int getVertexCount() {
+    return pos.length/2;
+  }
 }
