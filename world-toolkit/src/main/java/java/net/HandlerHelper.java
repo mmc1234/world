@@ -2,8 +2,8 @@ package java.net;
 
 import java.util.Hashtable;
 
-import com.github.mmc1234.world.leg2.toolkit.gui.View;
 import com.github.mmc1234.world.message.Event;
+import com.github.mmc1234.world.toolkit.gui.View;
 import com.google.common.eventbus.Subscribe;
 
 import lombok.AccessLevel;

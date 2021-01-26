@@ -9,10 +9,10 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
-import com.github.mmc1234.world.leg2.toolkit.renderer.ShaderProgram;
-import com.github.mmc1234.world.leg2.toolkit.window.ILocalContext;
-import com.github.mmc1234.world.leg2.toolkit.window.LocalContext;
-import com.github.mmc1234.world.leg2.toolkit.window.Window;
+import com.github.mmc1234.world.toolkit.renderer.ShaderProgram;
+import com.github.mmc1234.world.toolkit.window.ILocalContext;
+import com.github.mmc1234.world.toolkit.window.LocalContext;
+import com.github.mmc1234.world.toolkit.window.Window;
 
 import lombok.SneakyThrows;
 

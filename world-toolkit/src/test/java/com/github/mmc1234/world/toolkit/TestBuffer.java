@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
-import com.github.mmc1234.world.leg2.toolkit.renderer.UIMesh;
+import com.github.mmc1234.world.toolkit.renderer.UIMesh;
 
 import lombok.SneakyThrows;
 import lombok.var;
