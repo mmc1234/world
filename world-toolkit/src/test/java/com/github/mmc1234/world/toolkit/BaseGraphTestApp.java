@@ -81,8 +81,7 @@ public abstract class BaseGraphTestApp implements Runnable {
     GL30.glAttachShader(program, fragmentShader);
     GL30.glValidateProgram(program);
     GL30.glLinkProgram(program);
-    String log = GL30.glGetProgramInfoLog(program);
-    System.out.println(log);
+    System.out.println(GL30.glGetProgramInfoLog(program));
     return program;
   }
 }

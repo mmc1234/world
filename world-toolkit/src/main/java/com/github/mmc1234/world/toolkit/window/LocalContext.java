@@ -4,21 +4,21 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 
 import com.github.mmc1234.world.message.CancelableEventBus;
-import com.github.mmc1234.world.toolkit.gui.render.AbstractUIRenderer;
+import com.github.mmc1234.world.toolkit.renderer.UIRenderer;
 
 import lombok.Getter;
 
 public class LocalContext implements ILocalContext {
 
   private @Getter Window currentWindow;
-  private @Getter AbstractUIRenderer renderer;
+  private @Getter UIRenderer renderer;
   private @Getter CancelableEventBus eventBus;
   
   public LocalContext() {
     this(null);
   }
   
-  public LocalContext(AbstractUIRenderer renderer) {
+  public LocalContext(UIRenderer renderer) {
     this.renderer = renderer;
     eventBus = new CancelableEventBus("Local-Context"+Thread.currentThread());
   }

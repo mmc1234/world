@@ -1,10 +1,10 @@
 package com.github.mmc1234.world.toolkit.window;
 
 import com.github.mmc1234.world.message.CancelableEventBus;
-import com.github.mmc1234.world.toolkit.gui.render.AbstractUIRenderer;
+import com.github.mmc1234.world.toolkit.renderer.UIRenderer;
 
 public interface ILocalContext {
-  public AbstractUIRenderer getRenderer();
+  public UIRenderer getRenderer();
   public Window getCurrentWindow();
   public CancelableEventBus getEventBus();
   public void loadGL();

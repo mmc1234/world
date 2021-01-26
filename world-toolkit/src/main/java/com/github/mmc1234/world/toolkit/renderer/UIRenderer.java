@@ -1,4 +1,4 @@
-package com.github.mmc1234.world.toolkit.gui.render;
+package com.github.mmc1234.world.toolkit.renderer;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -10,12 +10,14 @@ import com.github.mmc1234.world.toolkit.window.ILocalContext;
 
 import lombok.NonNull;
 
-public abstract class AbstractUIRenderer implements Closeable {
+public class UIRenderer {
   private ViewTrack[] trackArray = new ViewTrack[64];
   private Pass[] passArray = new Pass[16];
   private int index = 0;
+  private UniformBufferExt uniformBuffer;
   
-  public AbstractUIRenderer() {
+  public UIRenderer(UniformBufferExt uniformBuffer) {
+    this.uniformBuffer = uniformBuffer;
     for(int i = 0; i<trackArray.length; i++) {
       trackArray[i] = new ViewTrack();
     }
@@ -42,8 +44,6 @@ public abstract class AbstractUIRenderer implements Closeable {
       trackArray[index].view = null;
     }
   }
-  
-  public abstract void create(ILocalContext context);
 
   protected void render(@NonNull ILocalContext context) {
     View root = context.getCurrentWindow().getRootView();
@@ -51,10 +51,13 @@ public abstract class AbstractUIRenderer implements Closeable {
       root.onPreRender(context);
     }
     for(Pass pass : passArray) {
-      pass.preRender(context);
+      pass.offset = uniformBuffer.request(pass.calculateUniformBufferSize());
     }
     for(Pass pass : passArray) {
-      pass.render(context);
+      pass.preRender(context); // 提交一些数据
+    }
+    for(Pass pass : passArray) {
+      pass.render(context, uniformBuffer); // 渲染
     }
   }
 }
