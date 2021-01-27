@@ -4,7 +4,7 @@ import com.github.mmc1234.world.toolkit.gui.View;
 
 import lombok.SneakyThrows;
 
-class Track implements Cloneable {
+public class Track implements Cloneable {
   protected View view;
   protected int layer;
   protected int offset;

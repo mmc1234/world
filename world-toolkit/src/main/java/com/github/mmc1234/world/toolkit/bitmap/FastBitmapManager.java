@@ -57,7 +57,6 @@ public class FastBitmapManager implements IBitmapManager {
     boolean isFullY = max.height == height;
     if (isFullX) {
       if (!isFullY) {
-        // 计算并提交free
         Bitmap freeRect = max.clone();
         freeRect.y += height;
         freeRect.height -= height;
@@ -65,18 +64,19 @@ public class FastBitmapManager implements IBitmapManager {
       }
     } else {
       if (isFullY) {
-        // 计算并提交free
         Bitmap freeRect = max.clone();
         freeRect.x += width;
         freeRect.width -= width;
+        freeRect.height = height;
         freeSet.add(freeRect);
       }
-      // 计算并提交free
       Bitmap freeRect = max.clone();
       freeRect.x += width;
       freeRect.width -= width;
       freeSet.add(freeRect);
     }
+    
+    // 这个是位图所在区域
     max.width = width;
     max.height = height;
     max.name = name;

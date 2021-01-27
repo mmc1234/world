@@ -1,16 +1,20 @@
 package com.github.mmc1234.world.toolkit.renderer;
 
+import com.github.mmc1234.world.toolkit.bitmap.IBitmap;
+
 import lombok.SneakyThrows;
 
 public final class UIMesh {
   float[] vertex; // vertex
 
   int[] color; // triagnle
-  String[] bitmap; // triagnle
-  float[] rect; // triagnle
+  String[] bitmapName; // triagnle
+  IBitmap[] bitmap;
+  short[] rect; // triagnle
+  float[] newVertex;
 
   public int getVertexCount() {
-    return vertex.length;
+    return vertex.length/4;
   }
 
   public static Builder builder() {
@@ -25,7 +29,7 @@ public final class UIMesh {
       source = new UIMesh();
       source.vertex = new float[4 * 128];
       source.color = new int[128];
-      source.bitmap = new String[128];
+      source.bitmapName = new String[128];
     }
 
     public Builder create() {
@@ -39,7 +43,7 @@ public final class UIMesh {
     }
 
     public Builder bitmap(String bitmap) {
-      source.bitmap[size / 3] = bitmap;
+      source.bitmapName[size / 3] = bitmap;
       return this;
     }
 
@@ -60,10 +64,10 @@ public final class UIMesh {
     public UIMesh build() {
       UIMesh mesh = (UIMesh) new UIMesh();
       mesh.vertex = new float[4*size];
-      mesh.bitmap = new String[size];
+      mesh.bitmapName = new String[size];
       mesh.color = new int[size];
       System.arraycopy(source.vertex, 0, mesh.vertex, 0, size);
-      System.arraycopy(source.bitmap, 0, mesh.bitmap, 0, size);
+      System.arraycopy(source.bitmapName, 0, mesh.bitmapName, 0, size);
       System.arraycopy(source.color, 0, mesh.color, 0, size);
       return mesh;
     }
