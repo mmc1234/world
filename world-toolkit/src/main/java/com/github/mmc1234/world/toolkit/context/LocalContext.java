@@ -4,8 +4,9 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 
 import com.github.mmc1234.world.message.CancelableEventBus;
+import com.github.mmc1234.world.toolkit.bitmap.FastBitmapManager;
 import com.github.mmc1234.world.toolkit.renderer.DirectUniformBufferExt;
-import com.github.mmc1234.world.toolkit.renderer.UIRenderer;
+import com.github.mmc1234.world.toolkit.renderer.Renderer;
 import com.github.mmc1234.world.toolkit.window.Window;
 
 import lombok.Getter;
@@ -13,12 +14,14 @@ import lombok.Getter;
 public class LocalContext implements ILocalContext {
 
   private @Getter Window currentWindow;
-  private @Getter UIRenderer renderer;
+  private @Getter Renderer renderer;
   private @Getter CancelableEventBus eventBus;
+  private @Getter FastBitmapManager bitmapManager;
   
   public LocalContext() {
-    this.renderer = new UIRenderer(new DirectUniformBufferExt());
+    this.renderer = new Renderer();
     eventBus = new CancelableEventBus("Local-Context"+Thread.currentThread());
+    bitmapManager = new FastBitmapManager(1024, 1024);
   }
 
   @Override

@@ -109,6 +109,13 @@ public final class Window {
     createWindow();
     checkEmpty();
     GLFW.glfwSetWindowSizeCallback(this.handle, (window, width, height) -> {
+      if(this.width != width | this.height != height) {
+        if(getRootView()!=null) {
+          Dimension2D size = new Dimension2D(width, height), pos = new Dimension2D(0, 0);
+          rootView.calculate(size, pos);
+          ViewUtils.reshape(rootView, pos.x, pos.y, size.x, size.y);
+        }
+      }
       this.width = width;
       this.height = height;
     });

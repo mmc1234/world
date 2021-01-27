@@ -10,9 +10,9 @@ public abstract class Layout extends View implements Iterable<View> {
   LinkedList<View> childList;
   
   @Override
-  public void onPreRender(ILocalContext ctx) {
+  public void onRender(ILocalContext ctx) {
     for(View child : this) {
-      child.onPreRender(ctx);
+      child.onRender(ctx);
     }
   }
 
