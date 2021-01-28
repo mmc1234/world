@@ -9,6 +9,7 @@ import org.lwjgl.system.MemoryUtil;
 import com.github.mmc1234.world.toolkit.MyUtils;
 import com.github.mmc1234.world.toolkit.ShaderUtils;
 import com.github.mmc1234.world.toolkit.local.ILocalContext;
+import com.github.mmc1234.world.toolkit.local.Window;
 import com.github.mmc1234.world.toolkit.renderer.VertexArray.Type;
 
 public class GL30Renderer implements IRenderer {
@@ -26,12 +27,13 @@ public class GL30Renderer implements IRenderer {
   }
   
   @Override
-  public void render(ILocalContext context) {
-    create(context);
-    for(IRenderBuffer buffer : context.getBatch().getBuffers()) {
+  public void render(Window window) {
+    ILocalContext context = window.getContext();
+    create(window);
+    for(IRenderBuffer buffer : window.getContext().getBatch().getBuffers()) {
       buffer.clear();
     }
-    context.getCurrentWindow().getRootView().onRender(context);
+    context.getCurrentWindow().getRootView().onRender(window);
     List<IRenderBuffer> buffers = context.getBatch().getBuffers();
     int vertexCount = 0;
     for(IRenderBuffer buffer : buffers) {
@@ -49,7 +51,7 @@ public class GL30Renderer implements IRenderer {
     for(IRenderBuffer buffer : buffers) {
       for(float[] vertexs : buffer.getVertexs()) {
         GL30.glBufferSubData(GL30.GL_ARRAY_BUFFER, offset*4, vertexs);
-        System.out.println("Vertex offset:"+offset);
+        System.out.print("Vertex offset:"+offset+";");
         offset+=vertexs.length;
       }
     }
@@ -68,7 +70,7 @@ public class GL30Renderer implements IRenderer {
       if(size == 0) {
         continue;
       }
-      System.out.println("Size:"+size);
+      System.out.print("Size:"+size+";");
       for(int i = 0; i<size; i++) {
         float[] va = vertexs.get(i);
         Object data = datas.get(i);
@@ -78,7 +80,7 @@ public class GL30Renderer implements IRenderer {
           for(int i1 = 0; i1<indexs.length; i1++) {
             indexs[i1] = -1;
           }
-          System.out.println("Index offset:"+offset);
+          System.out.print("Index offset:"+offset+";");
           GL30.glBufferSubData(GL30.GL_ARRAY_BUFFER, offset*Type.Int.size, indexs);
           offset+=indexArraySize;
         }
@@ -92,7 +94,7 @@ public class GL30Renderer implements IRenderer {
   }
 
   @Override
-  public void create(ILocalContext context) {
+  public void create(Window window) {
     if(program == -1) {
       program = ShaderUtils.createProgram(MyUtils.readTestFile("./happy/vs.glsl"), MyUtils.readTestFile("./happy/fs.glsl"));
       vertexArray.create();
@@ -100,7 +102,7 @@ public class GL30Renderer implements IRenderer {
   }
 
   @Override
-  public void close(ILocalContext context) {
+  public void close(Window window) {
     if(program != -1) {
       program = -1;
       vertexArray.close();

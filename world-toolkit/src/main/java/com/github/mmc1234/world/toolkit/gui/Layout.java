@@ -4,27 +4,28 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.github.mmc1234.world.toolkit.local.ILocalContext;
+import com.github.mmc1234.world.toolkit.local.Window;
 
 public abstract class Layout extends View implements Iterable<View> {
 
   LinkedList<View> childList;
   
   @Override
-  public void onRender(ILocalContext ctx) {
+  public void onRender(Window window) {
     for(View child : this) {
-      child.onRender(ctx);
+      child.onRender(window);
     }
   }
 
   @Override
-  public View onHit(ILocalContext ctx, double x, double y) {
+  public View onHit(Window window, double x, double y) {
     for(View child : this) {
-      View result = child.onHit(ctx, x, y);
+      View result = child.onHit(window, x, y);
       if(result!=null) {
         return result;
       }
     }
-    return super.onHit(ctx, x, y);
+    return super.onHit(window, x, y);
   }
   
   @Override
