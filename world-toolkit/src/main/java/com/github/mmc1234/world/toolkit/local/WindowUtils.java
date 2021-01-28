@@ -1,4 +1,4 @@
-package com.github.mmc1234.world.toolkit.window;
+package com.github.mmc1234.world.toolkit.local;
 
 import org.lwjgl.glfw.GLFW;
 

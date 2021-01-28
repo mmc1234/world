@@ -1,8 +1,10 @@
-package com.github.mmc1234.world.toolkit.renderer;
+package com.github.mmc1234.world.toolkit.legacy;
 
 import java.util.TreeSet;
 
-import com.github.mmc1234.world.toolkit.context.ILocalContext;
+import com.github.mmc1234.world.toolkit.local.ILocalContext;
+import com.github.mmc1234.world.toolkit.renderer.Track;
+import com.github.mmc1234.world.toolkit.renderer.VertexArray;
 
 public interface RenderHandler {
   public int handleCalculateVertexCount(ILocalContext context, TreeSet<Track> trackSet);

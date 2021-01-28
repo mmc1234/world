@@ -1,4 +1,4 @@
-package com.github.mmc1234.world.toolkit.window;
+package com.github.mmc1234.world.toolkit.local;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWDropCallback;
@@ -7,7 +7,6 @@ import org.lwjgl.system.MemoryUtil;
 import com.github.mmc1234.world.message.EditableQueryEvent;
 import com.github.mmc1234.world.message.QueryEvent;
 import com.github.mmc1234.world.toolkit.Dimension2D;
-import com.github.mmc1234.world.toolkit.context.ILocalContext;
 import com.github.mmc1234.world.toolkit.enumerate.ActionType;
 import com.github.mmc1234.world.toolkit.enumerate.ButtonType;
 import com.github.mmc1234.world.toolkit.event.CancelClickEvent;

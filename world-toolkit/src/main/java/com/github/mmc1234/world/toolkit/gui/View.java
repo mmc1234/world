@@ -1,14 +1,14 @@
 package com.github.mmc1234.world.toolkit.gui;
 
 import com.github.mmc1234.world.toolkit.Dimension2D;
-import com.github.mmc1234.world.toolkit.context.ILocalContext;
 import com.github.mmc1234.world.toolkit.enumerate.ActionType;
 import com.github.mmc1234.world.toolkit.enumerate.ButtonType;
 import com.github.mmc1234.world.toolkit.enumerate.SizeType;
 import com.github.mmc1234.world.toolkit.event.CancelClickEvent;
 import com.github.mmc1234.world.toolkit.event.ClickEvent;
 import com.github.mmc1234.world.toolkit.event.LongClickEvent;
-import com.github.mmc1234.world.toolkit.renderer.UIMesh;
+import com.github.mmc1234.world.toolkit.legacy.UIMesh;
+import com.github.mmc1234.world.toolkit.local.ILocalContext;
 import com.google.common.collect.ImmutableList;
 
 import lombok.ToString;

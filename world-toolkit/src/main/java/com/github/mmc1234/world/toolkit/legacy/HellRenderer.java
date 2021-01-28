@@ -1,4 +1,4 @@
-package com.github.mmc1234.world.toolkit.renderer;
+package com.github.mmc1234.world.toolkit.legacy;
 
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
@@ -8,7 +8,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import com.github.mmc1234.world.toolkit.MyUtils;
 import com.github.mmc1234.world.toolkit.Rect;
-import com.github.mmc1234.world.toolkit.context.ILocalContext;
+import com.github.mmc1234.world.toolkit.local.ILocalContext;
 import com.github.mmc1234.world.toolkit.renderer.VertexArray.Type;
 
 public final class HellRenderer {

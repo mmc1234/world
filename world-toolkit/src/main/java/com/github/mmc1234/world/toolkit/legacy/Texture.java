@@ -1,4 +1,4 @@
-package com.github.mmc1234.world.toolkit.renderer;
+package com.github.mmc1234.world.toolkit.legacy;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

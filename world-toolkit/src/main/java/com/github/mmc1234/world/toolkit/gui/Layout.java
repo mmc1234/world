@@ -3,7 +3,7 @@ package com.github.mmc1234.world.toolkit.gui;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import com.github.mmc1234.world.toolkit.context.ILocalContext;
+import com.github.mmc1234.world.toolkit.local.ILocalContext;
 
 public abstract class Layout extends View implements Iterable<View> {
 

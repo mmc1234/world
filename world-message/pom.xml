@@ -9,11 +9,10 @@
 		<artifactId>world</artifactId>
 		<version>0.0.1-alpha</version>
 	</parent>
-	<groupId>com.github.mmc1234</groupId>
 	<artifactId>world-message</artifactId>
-	<version>0.0.1-alpha</version>
 	<name>world-message</name>
 	<url>http://maven.apache.org</url>
+	<version>0.0.1-alpha</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

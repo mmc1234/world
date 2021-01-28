@@ -1,26 +1,22 @@
-package com.github.mmc1234.world.toolkit.window;
+package com.github.mmc1234.world.toolkit.local;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 
 import com.github.mmc1234.world.message.CancelableEventBus;
 import com.github.mmc1234.world.toolkit.bitmap.FastBitmapManager;
-import com.github.mmc1234.world.toolkit.context.ILocalContext;
-import com.github.mmc1234.world.toolkit.renderer.DebugRenderer;
-import com.github.mmc1234.world.toolkit.renderer.DirectUniformBufferExt;
-import com.github.mmc1234.world.toolkit.renderer.IRenderer;
+import com.github.mmc1234.world.toolkit.renderer.IGlyph;
 
 import lombok.Getter;
 
 public class LocalContext implements ILocalContext {
 
   private @Getter Window currentWindow;
-  private @Getter IRenderer renderer;
+  private @Getter IGlyph glyph;
   private @Getter CancelableEventBus eventBus;
   private @Getter FastBitmapManager bitmapManager;
   
   public LocalContext() {
-    this.renderer = new DebugRenderer();
     eventBus = new CancelableEventBus("Local-Context"+Thread.currentThread());
     bitmapManager = new FastBitmapManager(1024, 1024);
   }

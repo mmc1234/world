@@ -5,17 +5,16 @@ import com.github.mmc1234.world.toolkit.gui.View;
 import lombok.SneakyThrows;
 
 public class Track implements Cloneable {
-  protected View view;
-  protected int layer;
-  protected int offset;
+  public View view;
+  public int layer, color;
+  
 
   @Override
   @SneakyThrows
-  protected Track clone() {
+  public Track clone() {
     Track result = (Track) super.clone();
     result.view = view;
     result.layer = layer;
-    result.offset = offset;
     return result;
   }
 }

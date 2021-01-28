@@ -12,9 +12,9 @@ import org.lwjgl.opengl.GLDebugMessageCallbackI;
 import org.lwjgl.opengl.KHRDebug;
 import org.lwjgl.system.MemoryUtil;
 
-import com.github.mmc1234.world.toolkit.context.ILocalContext;
-import com.github.mmc1234.world.toolkit.window.LocalContext;
-import com.github.mmc1234.world.toolkit.window.Window;
+import com.github.mmc1234.world.toolkit.local.ILocalContext;
+import com.github.mmc1234.world.toolkit.local.LocalContext;
+import com.github.mmc1234.world.toolkit.local.Window;
 
 import lombok.SneakyThrows;
 

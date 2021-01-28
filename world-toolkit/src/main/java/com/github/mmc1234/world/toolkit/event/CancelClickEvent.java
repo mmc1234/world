@@ -3,7 +3,7 @@ package com.github.mmc1234.world.toolkit.event;
 import com.github.mmc1234.world.message.Event;
 import com.github.mmc1234.world.toolkit.enumerate.ButtonType;
 import com.github.mmc1234.world.toolkit.gui.View;
-import com.github.mmc1234.world.toolkit.window.Window;
+import com.github.mmc1234.world.toolkit.local.Window;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

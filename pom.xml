@@ -168,7 +168,6 @@
 	</repositories>
 	<modules>
 		<module>world-toolkit</module>
-		<module>world-lang</module>
-		<module>world-view</module>
-		<module>world-message</module></modules>
+		<module>world-message</module>
+  </modules>
 </project>
