@@ -19,8 +19,6 @@ public abstract class View {
   public double x, y, width, height, padTop, padBottom, padLeft, padRight;
   public SizeType xType = SizeType.Auto, yType = SizeType.Auto, wType = SizeType.Auto, hType = SizeType.Auto;
   
-  public abstract UIMesh getMesh();
-  
   public void calculate(Dimension2D size, Dimension2D pos) {
     ViewUtils.calculate(this, size, pos);
   }

@@ -11,8 +11,8 @@ import com.github.mmc1234.world.toolkit.Rect;
 import com.github.mmc1234.world.toolkit.context.ILocalContext;
 import com.github.mmc1234.world.toolkit.renderer.VertexArray.Type;
 
-public final class HellRenderer extends AbstractRenderer {
-
+public final class HellRenderer {
+/*
   private int program = -1, bufferSize, meshBuffer;
   private VertexArray vertexArray = new VertexArray(Type.Vec4, Type.Int);
   private ByteBuffer buffer;
@@ -61,7 +61,6 @@ public final class HellRenderer extends AbstractRenderer {
     GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vertexArray.getBuffer(1));
     updateBitmap();
     for(Track track:trackSet) {
-      UIMesh mesh = track.view.getMesh();
       for(int i = 0; i<mesh.getVertexCount()/3; i++) {
         buffer.putShort(mesh.rect[i*8]);
         buffer.putShort(mesh.rect[i*8+1]);
@@ -79,7 +78,6 @@ public final class HellRenderer extends AbstractRenderer {
     GL30.glTexSubImage2D(GL30.GL_TEXTURE_2D, 0, 0, 0, 512, 512, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, (ByteBuffer) buffer.flip());
     int vertexOffset = 0;
     for(Track track:trackSet) {
-      UIMesh mesh = track.view.getMesh();
       GL30.glBufferSubData(GL30.GL_ARRAY_BUFFER, vertexOffset, mesh.newVertex);
       vertexOffset = vertexOffset+mesh.newVertex.length*4;
     }
@@ -95,6 +93,6 @@ public final class HellRenderer extends AbstractRenderer {
   
   public void updateBitmap() {
     
-  }
+  }*/
 
 }

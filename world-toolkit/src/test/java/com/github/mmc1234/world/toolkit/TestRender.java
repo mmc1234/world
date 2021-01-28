@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
 import com.github.mmc1234.world.toolkit.context.ILocalContext;
-import com.github.mmc1234.world.toolkit.context.LocalContext;
+import com.github.mmc1234.world.toolkit.window.LocalContext;
 import com.github.mmc1234.world.toolkit.window.Window;
 
 import lombok.SneakyThrows;

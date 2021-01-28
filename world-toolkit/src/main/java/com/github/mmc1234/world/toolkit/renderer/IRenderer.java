@@ -16,4 +16,5 @@ public interface IRenderer {
   public void close(ILocalContext context);
   public void enter(View view, Object mesh);
   public void exit(View view);
+  public IGlyph getGlyph();
 }

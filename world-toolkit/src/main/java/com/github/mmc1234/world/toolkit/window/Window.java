@@ -26,7 +26,7 @@ import lombok.Getter;
 public final class Window {
   protected int[] buf1 = new int[1], buf2 = new int[1];
   private long clickTime, keyTime, handle = MemoryUtil.NULL;
-  private ILocalContext context;
+  protected ILocalContext context;
   protected boolean isFocus;
   private @Getter Cursor cursor;
   protected Monitor monitor;

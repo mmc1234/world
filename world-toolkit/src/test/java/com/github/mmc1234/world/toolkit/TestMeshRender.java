@@ -11,8 +11,10 @@ import com.github.mmc1234.world.toolkit.enumerate.ActionType;
 import com.github.mmc1234.world.toolkit.enumerate.ButtonType;
 import com.github.mmc1234.world.toolkit.event.CancelClickEvent;
 import com.github.mmc1234.world.toolkit.event.LongClickEvent;
+import com.github.mmc1234.world.toolkit.gui.Button;
 import com.github.mmc1234.world.toolkit.gui.View;
-import com.github.mmc1234.world.toolkit.renderer.Renderer;
+import com.github.mmc1234.world.toolkit.renderer.DebugRenderer;
+import com.github.mmc1234.world.toolkit.renderer.IRenderer;
 import com.github.mmc1234.world.toolkit.renderer.UIMesh;
 import com.github.mmc1234.world.toolkit.renderer.VertexArray;
 import com.github.mmc1234.world.toolkit.renderer.VertexArray.Type;
@@ -23,71 +25,11 @@ class TestMeshRender {
   @Test
   void test() {
     new BaseGraphTestApp() {
-      Renderer renderer = new Renderer((currentBaseSize, lastVertexCount, vertexCount) -> vertexCount);
+      DebugRenderer renderer = new DebugRenderer();
       @Override
       public void init() {
         renderer.create(ctx);
-        ctx.getCurrentWindow().setFocusView(new View() {
-          
-          @Override
-          public void onReshape(double x, double y, double width, double height) { 
-            System.out.println("Reshape");
-          }
-          
-          @Override
-          public void onRender(ILocalContext ctx) {
-          }
-          
-          @Override
-          public void onLongClick(LongClickEvent event) {
-          }
-          
-          @Override
-          public void onKey(ILocalContext ctx, ActionType type, double x, double y, int key, long time, int scancode,
-              int modes) {
-            
-          }
-          
-          @Override
-          public void onInput(ILocalContext ctx, char ch, double x, double y) {
-          }
-          
-          @Override
-          public void onFocusExit(ILocalContext ctx) {
-          }
-          
-          @Override
-          public void onFocusEnter(ILocalContext ctx) {
-            
-          }
-          
-          @Override
-          public void onDropFile(ILocalContext ctx, ImmutableList<String> paths) {
-
-          }
-          
-          @Override
-          public void onCancelClick(CancelClickEvent event) {
-            // TODO Auto-generated method stub
-            
-          }
-          
-          @Override
-          public void onButton(ILocalContext ctx, ActionType type, ButtonType buttonType, double x, double y, int mods) {
-            // TODO Auto-generated method stub
-            
-          }
-          UIMesh mesh = UIMesh.builder().vertex(-1, 1, 0, 0)
-              .vertex(-1, -1, 0, 1)
-              .vertex(1, 1, 1, 1)
-              .bitmap("hellokitty")
-              .color(0x00ff00ff)
-              .build();
-          @Override
-          public UIMesh getMesh() {
-            return mesh;
-          }
-        });
+        ctx.getCurrentWindow().setRootView(new Button());
       }
 
       @Override

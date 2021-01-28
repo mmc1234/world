@@ -13,7 +13,7 @@ import org.lwjgl.opengl.KHRDebug;
 import org.lwjgl.system.MemoryUtil;
 
 import com.github.mmc1234.world.toolkit.context.ILocalContext;
-import com.github.mmc1234.world.toolkit.context.LocalContext;
+import com.github.mmc1234.world.toolkit.window.LocalContext;
 import com.github.mmc1234.world.toolkit.window.Window;
 
 import lombok.SneakyThrows;
@@ -31,7 +31,7 @@ public abstract class BaseGraphTestApp implements Runnable {
     ctx.loadGL();
     
     double lastTime = GLFW.glfwGetTime();
-    final double FPS = 75;
+    final double FPS = 200;
     double t = 0;
     window.swapInterval(1);
     GLFW.glfwSetErrorCallback(new GLFWErrorCallbackI() {

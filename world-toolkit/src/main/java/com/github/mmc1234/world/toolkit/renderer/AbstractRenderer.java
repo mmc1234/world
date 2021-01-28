@@ -14,14 +14,12 @@ public abstract class AbstractRenderer implements IRenderer {
   public void render(ILocalContext context) {
     create(context);
     trackSet.clear();
-    View root = context.getCurrentWindow().getFocusView();
+    View root = context.getCurrentWindow().getRootView();
     root.onRender(context);
-    for (Track t : trackSet) {
-      vertexCount = vertexCount + t.view.getMesh().getVertexCount();
-    };
     malloc();
     update();
     draw();
+    lastVertexCount = vertexCount;
   }
   
   public abstract void malloc();
