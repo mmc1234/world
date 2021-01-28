@@ -10,7 +10,7 @@
 	<artifactId>world-toolkit</artifactId>
 	<name>world-toolkit</name>
 	<url>http://maven.apache.org</url>
-	<version>0.0.2-alpha</version>
+	<version>0.0.1-alpha</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

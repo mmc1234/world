@@ -9,7 +9,7 @@ import com.github.mmc1234.world.toolkit.event.CancelClickEvent;
 import com.github.mmc1234.world.toolkit.event.ClickEvent;
 import com.github.mmc1234.world.toolkit.event.LongClickEvent;
 import com.github.mmc1234.world.toolkit.local.ILocalContext;
-import com.github.mmc1234.world.toolkit.renderer.IGlyph;
+import com.github.mmc1234.world.toolkit.renderer.GL30Renderer;
 import com.google.common.collect.ImmutableList;
 
 public class Button extends View {
@@ -64,24 +64,26 @@ public class Button extends View {
   public void defaultSize(Dimension2D size) {
     size.set(100, 100);
   }
+  
+  float[] vs = new float[] {-1, 1, 0, 0, -1, -1, 0, 0, 1, 1, 0, 0,  1, 1, 0, 0, -1, -1, 0, 0, 1, -1, 0, 0};
 
   @Override
   public void onRender(ILocalContext ctx) {
-    System.out.println("Render");
-    GL30.glBegin(GL30.GL_TRIANGLES);
-    if(isClicking) {
-      GL30.glColor4f(0, 255, 0, 255);
-    } else {
-      GL30.glColor4f(255, 0, 255, 255);
-    }
-    GL30.glVertex2d(-1+actualX/400, 1-actualY/300);
-    GL30.glVertex2d(-1+actualX/400, 1-(actualY+actualHeight)/300);
-    GL30.glVertex2d(-1+(actualX+actualWidth)/400, 1-actualY/300);
-    GL30.glVertex2d(-1+(actualX+actualWidth)/400, 1-actualY/300);
-    GL30.glVertex2d(-1+actualX/400, 1-(actualY+actualHeight)/300);
-    GL30.glVertex2d(-1+(actualX+actualWidth)/400, 1-(actualY+actualHeight)/300);
-    
-    GL30.glEnd();
+    ctx.getBatch().enter(this);
+    ctx.getBatch().getCurrentBuffer().add(vs, GL30Renderer.EMPTY);
+    ctx.getBatch().exit(this);
+    /*
+     * GL30.glBegin(GL30.GL_TRIANGLES); if(isClicking) { GL30.glColor4f(0, 255, 0,
+     * 255); } else { GL30.glColor4f(255, 0, 255, 255); }
+     * GL30.glVertex2d(-1+actualX/400, 1-actualY/300);
+     * GL30.glVertex2d(-1+actualX/400, 1-(actualY+actualHeight)/300);
+     * GL30.glVertex2d(-1+(actualX+actualWidth)/400, 1-actualY/300);
+     * GL30.glVertex2d(-1+(actualX+actualWidth)/400, 1-actualY/300);
+     * GL30.glVertex2d(-1+actualX/400, 1-(actualY+actualHeight)/300);
+     * GL30.glVertex2d(-1+(actualX+actualWidth)/400, 1-(actualY+actualHeight)/300);
+     * 
+     * GL30.glEnd();
+     */
   }
 
   @Override

@@ -14,7 +14,7 @@ public class VertexArray {
   @AllArgsConstructor
   public static enum Type {
     Int(1, GL30.GL_INT), Float(1, GL30.GL_FLOAT), Vec2(2, GL30.GL_FLOAT), Vec3(3, GL30.GL_FLOAT), Vec4(4, GL30.GL_FLOAT);
-    private int size, type;
+    public final int size, type;
   }
   public VertexArray(Type...attribs) {
     typeArray = attribs;

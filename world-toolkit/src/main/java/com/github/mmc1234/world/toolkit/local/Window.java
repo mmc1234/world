@@ -2,6 +2,7 @@ package com.github.mmc1234.world.toolkit.local;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWDropCallback;
+import org.lwjgl.glfw.GLFWErrorCallbackI;
 import org.lwjgl.system.MemoryUtil;
 
 import com.github.mmc1234.world.message.EditableQueryEvent;
@@ -22,18 +23,19 @@ import lombok.Getter;
  * @author mmc1234 窗口减肥了，啧啧
  */
 @Getter
-public final class Window {
+public class Window {
   protected int[] buf1 = new int[1], buf2 = new int[1];
-  private long clickTime, keyTime, handle = MemoryUtil.NULL;
+  protected long clickTime, keyTime, handle = MemoryUtil.NULL;
   protected ILocalContext context;
   protected boolean isFocus;
-  private @Getter Cursor cursor;
+  protected @Getter Cursor cursor;
   protected Monitor monitor;
-  private EditableQueryEvent queryEvent;
-  private View rootView, focusView, holdView;
-  private Window shareWindow;
+  protected EditableQueryEvent queryEvent;
+  protected View rootView, focusView, holdView;
+  protected Window shareWindow;
   protected String title;
   protected int x, y, width, height;
+  
 
   public Window() {
     this("World", 600, 400);
@@ -66,7 +68,7 @@ public final class Window {
     }
   }
 
-  public void focus() {
+  public void setFocus() {
     GLFW.glfwFocusWindow(this.handle);
   }
 
