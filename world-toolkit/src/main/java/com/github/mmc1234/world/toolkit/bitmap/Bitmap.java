@@ -1,5 +1,7 @@
 package com.github.mmc1234.world.toolkit.bitmap;
 
+import java.net.URL;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -11,7 +13,7 @@ import lombok.ToString;
 @ToString
 class Bitmap implements IBitmap, Cloneable {
   protected int x, y, width, height, handle;
-  protected String name;
+  protected URL url;
   @Override
   @SneakyThrows
   protected Bitmap clone() {
@@ -21,7 +23,15 @@ class Bitmap implements IBitmap, Cloneable {
     result.width = width;
     result.height = height;
     result.handle = handle;
-    result.name = name;
     return result;
+  }
+  @Override
+  public URL getURL() {
+    return url;
+  }
+  
+  @Override
+  public String getName() {
+    return url.toString();
   }
 }

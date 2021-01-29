@@ -8,13 +8,13 @@ import com.github.mmc1234.world.toolkit.gui.View;
 
 public final class DevBatch implements IBatch {
   
-  private final View[] trackArray = new View[64];
+  private final View[] trackArray = new View[16];
   private final ArrayList<IRenderBuffer> renderBufferList;
   private int currentIndex = 0;
   
   public DevBatch() {
     renderBufferList = new ArrayList<>();
-    for(int i = 0; i<64; i++) {
+    for(int i = 0; i<16; i++) {
       renderBufferList.add(new ListRenderBuffer(currentIndex));
     }
   }

@@ -165,5 +165,6 @@
   <modules>
     <module>world-toolkit</module>
     <module>world-message</module>
+    <module>world-resource</module>
   </modules>
 </project>

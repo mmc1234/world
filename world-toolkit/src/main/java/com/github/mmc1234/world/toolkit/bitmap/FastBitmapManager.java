@@ -75,11 +75,10 @@ public class FastBitmapManager implements IBitmapManager {
       freeRect.width -= width;
       freeSet.add(freeRect);
     }
-    
+
     // 这个是位图所在区域
     max.width = width;
     max.height = height;
-    max.name = name;
     freeSet.remove(max);
     bitmaps.put(name, max);
   }
@@ -88,7 +87,7 @@ public class FastBitmapManager implements IBitmapManager {
     Bitmap result = null;
     if (textureCount < 14) {
       textureArray[textureCount] = GL30.glGenTextures();
-      freeSet.add(result = new Bitmap(0, 0, maxHeight, maxHeight, textureArray[textureCount], "Free Bitmap"));
+      freeSet.add(result = new EmptyBitmap(0, 0, maxHeight, maxHeight, textureArray[textureCount]));
       textureCount++;
     } else {
       throw new RuntimeException("纹理创建的太多了");
@@ -105,10 +104,9 @@ public class FastBitmapManager implements IBitmapManager {
         }
       }
     }
-    if(max == null) {
+    if (max == null) {
       max = createRect();
     }
-    //System.out.println("Max:" + max);
     return max;
   }
 

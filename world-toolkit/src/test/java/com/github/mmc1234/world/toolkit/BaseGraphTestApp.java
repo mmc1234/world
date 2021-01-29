@@ -31,7 +31,7 @@ public abstract class BaseGraphTestApp implements Runnable {
     ctx.loadGL();
     
     double lastTime = GLFW.glfwGetTime();
-    final double FPS = 2000;
+    final double FPS = 1000;
     double t = 0;
     window.swapInterval(1);
     GLFW.glfwSetErrorCallback(new GLFWErrorCallbackI() {

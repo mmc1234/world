@@ -32,7 +32,7 @@ public class Window {
   protected @Getter Cursor cursor;
   protected Monitor monitor;
 
-  protected View rootView, focusView, holdView;
+  protected View rootView, focusView, holdView, stayView;
   protected Window shareWindow;
   protected String title;
   protected int x, y, width, height;
@@ -140,7 +140,7 @@ public class Window {
       eventHandler.handleEnter(this, entered);
     });
     GLFW.glfwSetCursorPosCallback(this.handle, (window, xpos, ypos) -> {
-      eventHandler.handleMoveCursor(this, x, y);
+      eventHandler.handleMoveCursor(this, xpos, ypos);
     });
     GLFW.glfwSetDropCallback(this.handle, (window, count, names) -> {
       ImmutableList.Builder<String> paths = ImmutableList.builder();

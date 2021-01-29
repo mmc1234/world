@@ -3,11 +3,12 @@ package com.github.mmc1234.world.toolkit.renderer;
 import java.util.Collection;
 import java.util.List;
 
+import com.github.mmc1234.world.toolkit.gui.ViewMesh;
+
 public interface IRenderBuffer {
   public int getLayer();
-  public void add(float[] vertexs, Object data);
-  public List<float[]> getVertexs();
-  public List<Object> getDatas();
+  public void add(ViewMesh mesh);
+  public List<ViewMesh> getMeshList();
   public int getVertexCount();
   public void clear();
 }

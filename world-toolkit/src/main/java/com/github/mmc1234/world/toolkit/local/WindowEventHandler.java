@@ -38,11 +38,10 @@ public class WindowEventHandler implements IWindowEventHandler {
           window.clickTime = GLFW.glfwGetTimerValue();
         } else if (actionType == ActionType.Release) {
           window.holdView = null;
-          if (result == lastHoldView) {
+          if (result == lastHoldView || lastHoldView == null) {
             this.queryEvent.setEvent(new ClickEvent(window, hx, hy, buttonType));
             window.context.getEventBus().post(this.queryEvent);
             if (!this.queryEvent.getEvent().isCancel()) {
-              System.out.println("click");
               result.onClick((ClickEvent) this.queryEvent.getEvent());
             }
           } else {
@@ -63,6 +62,7 @@ public class WindowEventHandler implements IWindowEventHandler {
 
   @Override
   public void handleClose(Window window) {
+    
   }
 
   @Override
@@ -126,6 +126,19 @@ public class WindowEventHandler implements IWindowEventHandler {
     // 这里需要处理视图的悬浮
     window.cursor.x = x;
     window.cursor.y = y;
+    View lastStayView = window.getStayView();
+    double hx = window.getCursor().x, hy = window.getCursor().y;
+    View result = window.getRootView().onHit(window, hx, hy);
+    if(lastStayView != result) {
+      window.stayView = result;
+      if(lastStayView!=null) {
+        lastStayView.onExit(window);
+      }
+      if(result!=null) {
+        result.onEnter(window);
+      }
+    }
+    
   }
 
   @Override

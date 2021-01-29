@@ -3,11 +3,15 @@ package com.github.mmc1234.world.toolkit.renderer;
 import java.util.Collection;
 import java.util.List;
 
+import javax.activation.UnsupportedDataTypeException;
+
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
 import com.github.mmc1234.world.toolkit.MyUtils;
 import com.github.mmc1234.world.toolkit.ShaderUtils;
+import com.github.mmc1234.world.toolkit.bitmap.IBitmap;
+import com.github.mmc1234.world.toolkit.gui.ViewMesh;
 import com.github.mmc1234.world.toolkit.local.ILocalContext;
 import com.github.mmc1234.world.toolkit.local.Window;
 import com.github.mmc1234.world.toolkit.renderer.VertexArray.Type;
@@ -27,70 +31,11 @@ public class GL30Renderer implements IRenderer {
   }
   
   @Override
-  public void render(Window window) {
-    ILocalContext context = window.getContext();
-    create(window);
-    for(IRenderBuffer buffer : window.getContext().getBatch().getBuffers()) {
-      buffer.clear();
+  public void close(Window window) {
+    if(program != -1) {
+      program = -1;
+      vertexArray.close();
     }
-    context.getCurrentWindow().getRootView().onRender(window);
-    List<IRenderBuffer> buffers = context.getBatch().getBuffers();
-    int vertexCount = 0;
-    for(IRenderBuffer buffer : buffers) {
-      vertexCount+=buffer.getVertexCount();
-    }
-    
-    GL30.glUseProgram(program);
-    
-    // 提交顶点
-    int vertex = vertexArray.getBuffer(0);
-    GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vertex);
-    GL30.glBufferData(GL30.GL_ARRAY_BUFFER, vertexCount*4*4, GL30.GL_DYNAMIC_DRAW);
-    
-    int offset = 0;
-    for(IRenderBuffer buffer : buffers) {
-      for(float[] vertexs : buffer.getVertexs()) {
-        GL30.glBufferSubData(GL30.GL_ARRAY_BUFFER, offset*4, vertexs);
-        System.out.print("Vertex offset:"+offset+";");
-        offset+=vertexs.length;
-      }
-    }
-    
-    
-    // 生成并提交索引
-    int index = vertexArray.getBuffer(1);
-    offset = 0;
-    GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, index);
-    GL30.glBufferData(GL30.GL_ARRAY_BUFFER, vertexCount*4, GL30.GL_DYNAMIC_DRAW);
-    
-    for(IRenderBuffer buffer : buffers) {
-      List<float[]> vertexs = buffer.getVertexs();
-      List<Object> datas = buffer.getDatas();
-      int size = vertexs.size();
-      if(size == 0) {
-        continue;
-      }
-      System.out.print("Size:"+size+";");
-      for(int i = 0; i<size; i++) {
-        float[] va = vertexs.get(i);
-        Object data = datas.get(i);
-        if(data == EMPTY) {
-          int indexArraySize = va.length/4;
-          int[] indexs = new int[indexArraySize];
-          for(int i1 = 0; i1<indexs.length; i1++) {
-            indexs[i1] = -1;
-          }
-          System.out.print("Index offset:"+offset+";");
-          GL30.glBufferSubData(GL30.GL_ARRAY_BUFFER, offset*Type.Int.size, indexs);
-          offset+=indexArraySize;
-        }
-      }
-    }
-    System.out.println("VertexCount:"+vertexCount);
-    GL30.glEnable(GL30.GL_BLEND);
-    GL30.glClearColor(0.2f, 0.2f, 0.2f, 1);
-    GL30.glClear(GL30.GL_COLOR_BUFFER_BIT);
-    GL30.glDrawArrays(GL30.GL_TRIANGLES, 0, vertexCount);
   }
 
   @Override
@@ -102,11 +47,79 @@ public class GL30Renderer implements IRenderer {
   }
 
   @Override
-  public void close(Window window) {
-    if(program != -1) {
-      program = -1;
-      vertexArray.close();
+  public void render(Window window) {
+    ILocalContext context = window.getContext();
+    int vertexCount = 0;
+    create(window);
+    List<IRenderBuffer> buffers = context.getBatch().getBuffers();
+    for(IRenderBuffer buffer : buffers) {
+      buffer.clear();
     }
+    window.getRootView().onRender(window);
+    for(IRenderBuffer buffer : buffers) {
+      vertexCount+=buffer.getVertexCount();
+    }
+    
+    GL30.glUseProgram(program);
+    GL30.glBindVertexArray(vertexArray.getVao());
+    
+    /**
+     * bind vertex
+     * */
+    
+    GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER,  vertexArray.getBuffer(0));
+    GL30.glBufferData(GL30.GL_ARRAY_BUFFER, vertexCount*Type.Vec4.size*4, GL30.GL_STREAM_DRAW);
+    
+    System.out.println(vertexCount*Type.Vec4.size*4);
+    System.out.println(vertexCount*Type.Float.size*4);
+    
+    /**
+     * update
+     * */
+    
+    int offset = 0;
+    for(IRenderBuffer buffer : buffers) {
+      for(ViewMesh mesh : buffer.getMeshList()) {
+        float[] vertexArray = mesh.getVertex();
+        GL30.glBufferSubData(GL30.GL_ARRAY_BUFFER, offset*Type.Float.size, vertexArray);
+        offset = offset+vertexArray.length;
+      }
+    }
+    
+    /**
+     * bind texture
+     * */
+    
+    GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vertexArray.getBuffer(1));
+    GL30.glBufferData(GL30.GL_ARRAY_BUFFER, vertexCount*Type.Int.size*4, GL30.GL_STREAM_DRAW);
+    
+    /**
+     * update
+     * */
+    
+    offset = 0;
+    for(IRenderBuffer buffer : buffers) {
+      for(ViewMesh mesh : buffer.getMeshList()) {
+        int[] textureArray = new int[mesh.getBitmap().length];
+        IBitmap[] bitmapArray = mesh.getBitmap();
+        for(int i = 0; i<textureArray.length; i++) {
+          textureArray[i] = bitmapArray[i] == null ? 0 : bitmapArray[i].getHandle();
+        }
+        GL30.glBufferSubData(GL30.GL_ARRAY_BUFFER, offset*Type.Int.size, textureArray);
+        offset = offset+textureArray.length;
+      }
+    }
+    
+    /**
+     * draw
+     * */
+    
+    System.out.println("VertexCount:"+vertexCount);
+    
+    GL30.glEnable(GL30.GL_BLEND);
+    GL30.glClearColor(0.2f, 0.2f, 0.2f, 1);
+    GL30.glClear(GL30.GL_COLOR_BUFFER_BIT);
+    GL30.glDrawArrays(GL30.GL_TRIANGLES, 0, vertexCount);
   }
 
 }

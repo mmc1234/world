@@ -1,6 +1,8 @@
 package com.github.mmc1234.world.toolkit.gui;
 
 import com.github.mmc1234.world.toolkit.Dimension2D;
+import com.github.mmc1234.world.toolkit.bitmap.IBitmap;
+import com.github.mmc1234.world.toolkit.bitmap.IBitmapManager;
 
 import lombok.experimental.UtilityClass;
 
@@ -63,5 +65,12 @@ public class ViewUtils {
   
   public static boolean hit(View view, double x, double y) {
     return x >= view.actualX && y >= view.actualY && x<= (view.actualX+view.actualWidth) && y<= (view.actualY+view.actualHeight);
+  }
+  
+  public static void getBitmap(IBitmapManager bitmapManager, String[] bitmapNames, IBitmap[] bitmaps) {
+    int size = Math.min(bitmaps.length, bitmapNames.length);
+    for(int i = 0; i<size; i++) {
+      bitmaps[i] = bitmapManager.get(bitmapNames[i]);
+    }
   }
 }

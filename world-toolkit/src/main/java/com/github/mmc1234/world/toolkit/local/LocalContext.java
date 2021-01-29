@@ -1,5 +1,6 @@
 package com.github.mmc1234.world.toolkit.local;
 
+import org.apache.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 
@@ -21,12 +22,14 @@ public class LocalContext implements ILocalContext {
   private @Getter IRenderer renderer;
   private @Getter CancelableEventBus eventBus;
   private @Getter IBitmapManager bitmapManager;
+  private @Getter Logger logger;
   
   public LocalContext() {
-    eventBus = new CancelableEventBus("Local-Context"+Thread.currentThread());
+    eventBus = new CancelableEventBus("Local-Context("+Thread.currentThread()+")");
     bitmapManager = new FastBitmapManager(1024, 1024);
     renderer = new GL30Renderer();
     batch = new DevBatch();
+    logger = Logger.getLogger("Local-Context("+Thread.currentThread()+")");
   }
 
   @Override

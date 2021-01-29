@@ -1,5 +1,7 @@
 package com.github.mmc1234.world.toolkit.local;
 
+import org.apache.log4j.Logger;
+
 import com.github.mmc1234.world.message.CancelableEventBus;
 import com.github.mmc1234.world.toolkit.bitmap.IBitmapManager;
 import com.github.mmc1234.world.toolkit.renderer.IBatch;
@@ -11,6 +13,7 @@ public interface ILocalContext {
   public Window getCurrentWindow();
   public CancelableEventBus getEventBus();
   public IBitmapManager getBitmapManager();
+  public Logger getLogger();
   public void loadGL();
   public void make(Window window);
   public void onWindowDestry(Window window);

@@ -1,12 +1,10 @@
 package com.github.mmc1234.world.toolkit;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.apache.log4j.xml.DOMConfigurator;
 import org.junit.jupiter.api.Test;
+import org.lwjgl.glfw.GLFW;
 
 import com.github.mmc1234.world.toolkit.gui.Button;
-import com.github.mmc1234.world.toolkit.local.ILocalContext;
-import com.github.mmc1234.world.toolkit.local.LocalContext;
 
 class TestRenderer {
 
@@ -15,7 +13,7 @@ class TestRenderer {
     new BaseGraphTestApp() {
       @Override
       public void render() {
-        ctx.getRenderer().render(ctx);
+        ctx.getRenderer().render(ctx.getCurrentWindow());
       }
       
       @Override

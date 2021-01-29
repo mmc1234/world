@@ -7,18 +7,19 @@ import com.github.mmc1234.world.toolkit.enumerate.SizeType;
 import com.github.mmc1234.world.toolkit.event.CancelClickEvent;
 import com.github.mmc1234.world.toolkit.event.ClickEvent;
 import com.github.mmc1234.world.toolkit.event.LongClickEvent;
-import com.github.mmc1234.world.toolkit.legacy.UIMesh;
 import com.github.mmc1234.world.toolkit.local.ILocalContext;
 import com.github.mmc1234.world.toolkit.local.Window;
 import com.google.common.collect.ImmutableList;
 
+import lombok.Getter;
 import lombok.ToString;
 
 @ToString
-public class View {
+public abstract class View {
   protected double actualX, actualY, actualWidth, actualHeight;
   public double x, y, width, height, padTop, padBottom, padLeft, padRight;
   public SizeType xType = SizeType.Auto, yType = SizeType.Auto, wType = SizeType.Auto, hType = SizeType.Auto;
+  protected boolean isRedraw = true;
 
   public void calculate(Dimension2D size, Dimension2D pos) {
     ViewUtils.calculate(this, size, pos);
@@ -62,8 +63,21 @@ public class View {
   }
 
   public void onRender(Window window) {
+    if(isRedraw) {
+      isRedraw = false;
+      onRedraw(window);
+    }
   }
 
   public void onReshape(double x, double y, double width, double height) {
+    isRedraw = true;
   }
+  
+  public void onEnter(Window window) {
+  }
+  
+  public void onExit(Window window) {
+  }
+  
+  public abstract void onRedraw(Window window);
 }
