@@ -26,6 +26,7 @@ public class LwjglWindowExtension implements PlatformExtension {
   
   protected String title;
   protected int x, y, width, height;
+  
   public LwjglWindowExtension() {
     this(null, null, "World", 600, 400);
   }
@@ -233,5 +234,16 @@ public class LwjglWindowExtension implements PlatformExtension {
     if(GLFW.glfwGetCurrentContext() == getHandle()) {
       GLFW.glfwMakeContextCurrent(0);
     }
+  }
+
+  @Override
+  public boolean isShouldClose() {
+    return GLFW.glfwWindowShouldClose(getHandle());
+  }
+
+  @Override
+  public void setShouldClose(boolean shouldClose) {
+    GLFW.glfwSetWindowShouldClose(getHandle(), shouldClose);
+    
   }
 }

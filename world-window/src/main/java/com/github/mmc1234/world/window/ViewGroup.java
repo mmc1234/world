@@ -68,24 +68,4 @@ public class ViewGroup extends View {
   public ArrayList<View> getChildren() {
     return (ArrayList<View>) children.clone();
   }
-  
-  public static int getDefaultChildWidth(View view, MeasureSpec spec, int measureSize) {
-    if(spec == MeasureSpec.Unspecified) {
-      return measureSize;
-    } else if(spec == MeasureSpec.AtMost){
-      return view.getSuggestedMinimumWidth();
-    } else {
-      return view.getMeasuredWidth();
-    }
-  }
-  
-  public static int getDefaultChildHeight(View view, MeasureSpec spec, int measureSize) {
-    if(spec == MeasureSpec.Unspecified) {
-      return measureSize;
-    } else if(spec == MeasureSpec.AtMost){
-      return view.getSuggestedMinimumHeight();
-    } else {
-      return view.getMeasuredHeight();
-    }
-  }
 }

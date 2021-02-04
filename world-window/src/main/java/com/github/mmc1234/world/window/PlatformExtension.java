@@ -15,4 +15,6 @@ public interface PlatformExtension {
    * If the window is attached to the current thread, unattach it.
    * */
   public void unmake();
+  public boolean isShouldClose();
+  public void setShouldClose(boolean shouldClose);
 }

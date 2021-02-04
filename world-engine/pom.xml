@@ -24,6 +24,11 @@
 			<version>0.0.1-alpha</version>
 		</dependency>
 		<dependency>
+      <groupId>com.github.mmc1234</groupId>
+      <artifactId>world-lwjgl</artifactId>
+      <version>0.0.1-alpha</version>
+    </dependency>
+		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl</artifactId>
 			<version>3.2.2</version>
@@ -67,5 +72,6 @@
 			<version>3.2.2</version>
 			<classifier>natives-windows</classifier>
 		</dependency>
+		
 	</dependencies>
 </project>

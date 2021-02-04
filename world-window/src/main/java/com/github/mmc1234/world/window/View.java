@@ -8,11 +8,29 @@ import com.google.common.collect.Multimap;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class View {
-  public static int getDefaultSize(MeasureSpec spec, int size, int measureSpec) {
-    return spec == MeasureSpec.Unspecified ? size : measureSpec;
+  public static int getDefaultSize(MeasureSpec spec, LayoutMode mode, int pixelSize, int size, int measureSpec, double ratio) {
+    System.out.println(mode);
+    switch (mode) {
+    case Match:
+      if (spec == MeasureSpec.Unspecified) {
+        return -measureSpec;
+      } else {
+        return -size;
+      }
+    case Ratio:
+      // Is floating-point loss possible?
+      return (int) (measureSpec * ratio);
+    case Pixel:
+      return pixelSize;
+    case Wrap:
+      return size;
+    }
+    return 0;
   }
 
   protected @Setter boolean isFocusable;
@@ -25,7 +43,7 @@ public class View {
   protected int padLeft, padRight, padTop, padBottom;
   protected double ratioW, ratioH;
   protected @Setter VisibilityType visibility;
-  
+
   protected Window window;
 
   protected int x, y, width, height;
@@ -38,7 +56,23 @@ public class View {
     setLayoutWidth(LayoutMode.Wrap);
     setLayoutHeight(LayoutMode.Wrap);
   }
+  
+  public void setX(int x) {
+    this.x = x<0?0:x;
+  }
+  
+  public void setY(int y) {
+    this.y = y<0?0:y;
+  }
+  
+  public void setWidth(int width) {
+    this.width = width <0 ? 0 : width;
+  }
 
+  public void setHeight(int height) {
+    this.height = height <0 ? 0 : height;
+  }
+  
   public final void addListener(Class<?> listenerType, @NonNull Object l) {
     if (listenerType.isAssignableFrom(l.getClass())) {
       listenerList.put(listenerType, l);
@@ -67,7 +101,7 @@ public class View {
 
   /**
    * The second phase of measurement.
-   * */
+   */
   public void layout(int left, int right, int top, int bottom) {
     boolean changed = this.left != left | this.right != right | this.top != top | this.bottom != bottom;
     this.left = left;
@@ -78,7 +112,8 @@ public class View {
   }
 
   /**
-   * This method is called by the layout to measure the child.If you need to measure, you just override the onMeasure.
+   * This method is called by the layout to measure the child.If you need to
+   * measure, you just override the onMeasure.
    */
   public final void measure(MeasureSpec spec, int widthMeasureSpec, int heightMeasureSpec) {
     if (visibility == VisibilityType.Gone) {
@@ -88,9 +123,9 @@ public class View {
     switch (spec) {
     case Unspecified: // Slider view, you can apply any size, so you need to send events.
     case AtMost:
-        onMeasure(spec, widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(measuredWidth > widthMeasureSpec ? widthMeasureSpec : measuredWidth,
-            measuredHeight > heightMeasureSpec ? heightMeasureSpec : measuredHeight);
+      onMeasure(spec, widthMeasureSpec, heightMeasureSpec);
+      setMeasuredDimension(measuredWidth > widthMeasureSpec ? widthMeasureSpec : measuredWidth,
+          measuredHeight > heightMeasureSpec ? heightMeasureSpec : measuredHeight);
       break;
     case Exactly:
       setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
@@ -114,8 +149,8 @@ public class View {
   }
 
   protected void onMeasure(MeasureSpec spec, int widthMeasureSpec, int heightMeasureSpec) {
-    setMeasuredDimension(getDefaultSize(spec, getSuggestedMinimumWidth(), widthMeasureSpec),
-        getDefaultSize(spec, getSuggestedMinimumHeight(), heightMeasureSpec));
+    setMeasuredDimension(getDefaultSize(spec, getLayoutWidth(), width,  getSuggestedMinimumWidth(), widthMeasureSpec, ratioW),
+        getDefaultSize(spec, getLayoutHeight(), height, getSuggestedMinimumHeight(), heightMeasureSpec, ratioH));
   }
 
   public final void removeListener(Class<?> listenerType, @NonNull Object l) {
@@ -124,7 +159,7 @@ public class View {
     }
   }
 
-  protected final void setMeasuredDimension(int measuredWidth, int measuredHeight) {
+  public final void setMeasuredDimension(int measuredWidth, int measuredHeight) {
     this.measuredWidth = measuredWidth;
     this.measuredHeight = measuredHeight;
   }
