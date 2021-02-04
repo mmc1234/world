@@ -19,7 +19,7 @@ import com.github.mmc1234.world.toolkit.local.Window;
 import lombok.SneakyThrows;
 
 public abstract class BaseGraphTestApp implements Runnable {
-  ILocalContext ctx;
+  public ILocalContext ctx;
   public final void run() {
     GLFW.glfwInit();
     ctx = new LocalContext();
@@ -72,9 +72,9 @@ public abstract class BaseGraphTestApp implements Runnable {
     int vertexShader = GL30.glCreateShader(GL30.GL_VERTEX_SHADER);
     int fragmentShader = GL30.glCreateShader(GL30.GL_FRAGMENT_SHADER);
     GL30.glShaderSource(vertexShader,
-        IOUtils.toString(TestRender.class.getClassLoader().getResource(vs), Charset.defaultCharset()));
+        IOUtils.toString(BaseGraphTestApp.class.getClassLoader().getResource(vs), Charset.defaultCharset()));
     GL30.glShaderSource(fragmentShader, IOUtils
-        .toString(TestRender.class.getClassLoader().getResource(fs), Charset.defaultCharset()));
+        .toString(BaseGraphTestApp.class.getClassLoader().getResource(fs), Charset.defaultCharset()));
     GL30.glCompileShader(vertexShader);
     GL30.glCompileShader(fragmentShader);
     GL30.glAttachShader(program, vertexShader);

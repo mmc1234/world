@@ -128,7 +128,7 @@ public class WindowEventHandler implements IWindowEventHandler {
     window.cursor.y = y;
     View lastStayView = window.getStayView();
     double hx = window.getCursor().x, hy = window.getCursor().y;
-    View result = window.getRootView().onHit(window, hx, hy);
+    View result = window.getRootView() == null ? null : window.getRootView().onHit(window, hx, hy);
     if(lastStayView != result) {
       window.stayView = result;
       if(lastStayView!=null) {

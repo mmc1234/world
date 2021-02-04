@@ -10,7 +10,10 @@ public class MyUtils {
   @SneakyThrows
   public static String readTestFile(String path) {
     return IOUtils.toString(
-        Class.forName("com.github.mmc1234.world.toolkit.TestRenderer").getClassLoader().getResourceAsStream(path),
+        MyUtils.class.getClassLoader().getResourceAsStream(path),
         Charset.defaultCharset());
+    /*return IOUtils.toString(
+        Class.forName("com.github.mmc1234.world.toolkit.TestRenderer").getClassLoader().getResourceAsStream(path),
+        Charset.defaultCharset());*/
   }
 }

@@ -22,6 +22,7 @@ public class BufferedViewMesh extends ViewMesh {
       vertexCache[i*4] = (vertex[i*4]+1.0f) * scaleW+scaleX-1;
       vertexCache[i*4+1] = 1-(vertex[i*4+1]+1.0f) * scaleH+scaleY;
     }
+    // 通过名称得到bitmap
   }
   
   @Override

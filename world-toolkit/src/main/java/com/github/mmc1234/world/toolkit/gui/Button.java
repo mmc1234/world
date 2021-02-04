@@ -3,12 +3,14 @@ package com.github.mmc1234.world.toolkit.gui;
 import org.lwjgl.opengl.GL30;
 
 import com.github.mmc1234.world.toolkit.Dimension2D;
+import com.github.mmc1234.world.toolkit.MyUtils;
 import com.github.mmc1234.world.toolkit.bitmap.IBitmap;
 import com.github.mmc1234.world.toolkit.enumerate.ActionType;
 import com.github.mmc1234.world.toolkit.enumerate.ButtonType;
 import com.github.mmc1234.world.toolkit.event.CancelClickEvent;
 import com.github.mmc1234.world.toolkit.event.ClickEvent;
 import com.github.mmc1234.world.toolkit.event.LongClickEvent;
+import com.github.mmc1234.world.toolkit.legacy.Texture;
 import com.github.mmc1234.world.toolkit.local.ILocalContext;
 import com.github.mmc1234.world.toolkit.local.Window;
 import com.github.mmc1234.world.toolkit.renderer.GL30Renderer;
@@ -39,11 +41,11 @@ public class Button extends View {
   
   BufferedViewMesh mesh = new BufferedViewMesh(new float[] {
       -1, 1, 0, 0,
-      -1, -1, 0, 0,
-      1, 1, 0, 0,
-      1, 1, 0, 0,
-      -1, -1, 0, 0,
-      1, -1, 0, 0,
+      -1, -1, 0, 1,
+      1, 1, 1, 0,
+      1, 1, 1, 0,
+      -1, -1, 0, 1,
+      1, -1, 1, 1,
   }, new String[]{"HelloKitty", "HelloKitty"});
   
  @Override
@@ -61,7 +63,6 @@ public class Button extends View {
   
   @Override
   public void onEnter(Window window) {
-    System.out.println("Enter");
   }
  
 }

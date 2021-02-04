@@ -12,6 +12,11 @@ import lombok.Getter;
 public class Monitor {
   protected long handle;
   protected String name;
+  protected VideoMode videoMode;
+  
+  public void a() {
+    GLFW.glfwGetVideoMode(handle);
+  }
   
   public static ArrayList<Monitor> getMonitorList() {
     PointerBuffer pb = GLFW.glfwGetMonitors();

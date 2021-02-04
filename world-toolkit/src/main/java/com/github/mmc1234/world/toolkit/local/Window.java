@@ -14,18 +14,20 @@ import com.github.mmc1234.world.toolkit.event.CancelClickEvent;
 import com.github.mmc1234.world.toolkit.event.ClickEvent;
 import com.github.mmc1234.world.toolkit.event.LongClickEvent;
 import com.github.mmc1234.world.toolkit.exception.EmptyException;
+import com.github.mmc1234.world.toolkit.gl.GLManager;
 import com.github.mmc1234.world.toolkit.gui.View;
 import com.github.mmc1234.world.toolkit.gui.ViewUtils;
 import com.google.common.collect.ImmutableList;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
- * @author mmc1234 窗口减肥了，啧啧
+ * @author mmc1234
  */
 @Getter
 public class Window {
-  protected int[] buf1 = new int[1], buf2 = new int[1];
+  protected @Getter(value = AccessLevel.PRIVATE) int[] buf1 = new int[1], buf2 = new int[1];
   protected long clickTime, keyTime, handle = MemoryUtil.NULL;
   protected ILocalContext context;
   protected boolean isFocus;
@@ -38,18 +40,21 @@ public class Window {
   protected int x, y, width, height;
   private final IWindowExceptionHandler exceptionHandler;
   private final IWindowEventHandler eventHandler;
+  private GLManager glManager;
 
   public Window() {
     this("World", 600, 400);
   }
 
   public Window(String inTitle, int inWidth, int inHeight) {
-    this(null, null, "World", 600, 400);
+    this(null, null, inTitle, inWidth, inHeight);
   }
   
   public Window(Window inShare, Monitor inMonitor, String inTitle, int inWidth, int inHeight) {
-    this(new WindowExceptionHandler(), new WindowEventHandler(), inShare, inMonitor, "World", 600, 400);
+    this(new WindowExceptionHandler(), new WindowEventHandler(), inShare, inMonitor, inTitle, inWidth, inHeight);
   }
+  
+  
 
   public Window(IWindowExceptionHandler errorHandler, IWindowEventHandler eventHandler, Window inShare, Monitor inMonitor,
       String inTitle, int inWidth, int inHeight) {
@@ -58,13 +63,13 @@ public class Window {
     this.title = inTitle;
     this.width = inWidth;
     this.height = inHeight;
-    cursor = new Cursor(this);
-
     this.exceptionHandler = errorHandler;
     this.eventHandler = eventHandler;
+    cursor = new Cursor(this);
+    glManager = new GLManager();
   }
 
-  public void checkEmpty() {
+  protected void checkEmpty() {
     if (isEmpty()) {
       exceptionHandler.handleException(new EmptyException("Empty window"));
     }

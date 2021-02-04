@@ -11,10 +11,11 @@ import org.lwjgl.system.MemoryUtil;
 import com.github.mmc1234.world.toolkit.MyUtils;
 import com.github.mmc1234.world.toolkit.ShaderUtils;
 import com.github.mmc1234.world.toolkit.bitmap.IBitmap;
+import com.github.mmc1234.world.toolkit.gl.Type;
+import com.github.mmc1234.world.toolkit.gl.VertexArray;
 import com.github.mmc1234.world.toolkit.gui.ViewMesh;
 import com.github.mmc1234.world.toolkit.local.ILocalContext;
 import com.github.mmc1234.world.toolkit.local.Window;
-import com.github.mmc1234.world.toolkit.renderer.VertexArray.Type;
 
 public class GL30Renderer implements IRenderer {
   public static final Object EMPTY = new Object() {

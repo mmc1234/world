@@ -1,9 +1,8 @@
-package com.github.mmc1234.world.toolkit.renderer;
+package com.github.mmc1234.world.toolkit.gl;
 
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class VertexArray {
@@ -11,11 +10,6 @@ public class VertexArray {
   private int vao;
   private int[] attribArray;
   private Type[] typeArray;
-  @AllArgsConstructor
-  public static enum Type {
-    Int(1, GL30.GL_INT), Float(1, GL30.GL_FLOAT), Vec2(2, GL30.GL_FLOAT), Vec3(3, GL30.GL_FLOAT), Vec4(4, GL30.GL_FLOAT);
-    public final int size, type;
-  }
   public VertexArray(Type...attribs) {
     typeArray = attribs;
   }
