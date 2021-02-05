@@ -36,10 +36,6 @@ class ColorButtonTest {
 
   ll.addView(new ColorButton(Color.pink));
   View btn = ll.getView(0);
-  btn.setLayoutWidth(LayoutMode.Pixel);
-  btn.setLayoutHeight(LayoutMode.Pixel);
-  btn.setSize(30, 20);
-  btn.setPadLeft(0);
   window.setLayout(ll);
   
   GL2Batch batch = new GL2Batch();
@@ -53,12 +49,12 @@ class ColorButtonTest {
       size.y = window.getHeight();
     }
   });
+  
   while(!window.isShouldClose()) {
     GLFW.glfwWaitEventsTimeout(0.5);
     if(window.getHandle() <= 0) {
       break;
     }
-    window.refreshLayout();
     batch.beginFrame(0, 0, 0);
     batch.enablePixelMode();
     new ViewRenderListener().onRender(new ViewRenderEvent(ll, batch));

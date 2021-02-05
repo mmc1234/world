@@ -12,7 +12,6 @@ import lombok.Setter;
 import lombok.experimental.Delegate;
 
 @RequiredArgsConstructor
-
 public class Window implements Viewport {
   public static final @Getter Logger logger = Logger.getLogger(Window.class);
   private @Getter final CancelableEventBus eventBus;

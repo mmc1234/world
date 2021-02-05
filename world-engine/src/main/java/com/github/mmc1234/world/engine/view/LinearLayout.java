@@ -38,12 +38,12 @@ public class LinearLayout extends ViewGroup {
         if (isHorizontal) {
           ox += child.getPadLeft();
           child.layout(left + ox, left + ox + child.getMeasuredWidth(), top + oy + child.getPadTop(),
-              top + oy + child.getPadTop() + child.getHeight());
+              top + oy + child.getPadTop() + child.getMeasuredHeight());
           ox += (child.getMeasuredWidth() + child.getPadRight());
         } else {
           oy += child.getPadTop();
           child.layout(left + ox + child.getPadLeft(), left + ox+child.getPadLeft() + child.getMeasuredWidth(),
-              top + oy, top + oy + child.getHeight());
+              top + oy, top + oy + child.getMeasuredHeight());
           oy += (child.getMeasuredHeight() + child.getPadBottom());
         }
       }

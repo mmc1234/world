@@ -7,6 +7,7 @@ import com.github.mmc1234.world.window.CancelClickEvent;
 import com.github.mmc1234.world.window.ClickDownEvent;
 import com.github.mmc1234.world.window.ClickEvent;
 import com.github.mmc1234.world.window.ClickListener;
+import com.github.mmc1234.world.window.LayoutMode;
 import com.github.mmc1234.world.window.LongClickEvent;
 import com.github.mmc1234.world.window.View;
 import com.github.mmc1234.world.window.ViewTree;
@@ -46,6 +47,16 @@ public class ColorButton extends View implements ViewTree.OnDrawListener, ClickL
     r = 1-(buttonColor.getRed()/255f);
     g = 1-(buttonColor.getGreen()/255f);
     b = 1-(buttonColor.getBlue()/255f);
+  }
+  
+  @Override
+  public int getSuggestedMinimumWidth() {
+    return layoutWidth == LayoutMode.Wrap ? 40 : 0;
+  }
+  
+  @Override
+  public int getSuggestedMinimumHeight() {
+    return layoutHeight == LayoutMode.Wrap ? 20 : 0;
   }
   @Override
   public void onCancelClick(CancelClickEvent event) {

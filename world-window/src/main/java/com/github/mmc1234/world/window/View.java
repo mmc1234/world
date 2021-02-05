@@ -29,6 +29,7 @@ public class View {
       }
       // extend warp
     case Wrap:
+      System.out.println("Warp");
       return minSize;
     }
     return 0;
