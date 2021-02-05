@@ -8,11 +8,13 @@ public interface Batch {
   public void clean();
   public void color(float r, float g, float b);
   public void color(float r, float g, float b, float a);
-  public void draw(float x, float y, float tx, float ty);
+  public void draw(double x, double y, double tx, double ty);
   public void end();
   public void endBuffer(BufferedDrawItem bufferedItem);
   public void endFrame();
   public void image(int handle, int x, int y, int w, int h);
-  public void viewport(int x, int y, int w, int h);
-  public void setPixel(boolean isPixel);
+  public void viewport(Viewport vp);
+  public void enablePixelMode();
+  public void setWindow(Window window);
+  public Window getWindow();
 }

@@ -10,9 +10,12 @@ import org.lwjgl.opengl.GL30;
 
 import com.github.mmc1234.world.window.Batch;
 import com.github.mmc1234.world.window.BufferedDrawItem;
+import com.github.mmc1234.world.window.Dimension2D;
+import com.github.mmc1234.world.window.Viewport;
 import com.github.mmc1234.world.window.Window;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 
 public class GL2Batch implements Batch {
@@ -23,8 +26,9 @@ public class GL2Batch implements Batch {
   }
   private Map<BufferedDrawItem, Info> bufferMap;
   private ArrayList<Info> infoCache;
-  private @Setter Window window;
+  private @Setter @Getter Window window;
   private int handle, x, y, w, h;
+  private Dimension2D pos = new Dimension2D(), size = new Dimension2D();
   
   public GL2Batch() {
     infoCache = new ArrayList<>();
@@ -88,13 +92,11 @@ public class GL2Batch implements Batch {
   }
 
   @Override
-  public void setPixel(boolean isPixel) {
+  public void enablePixelMode() {
     GL30.glMatrixMode(GL30.GL_PROJECTION);
     GL30.glLoadIdentity();
-    if(isPixel) {
-      GL30.glScaled(1/window.getWidth(), window.getHeight(), 0);
-    }
-    GL30.glOrtho(0, 1, 1, 0, 0, 1);
+    //GL30.glScaled(1.0/size.x, 1.0/size.y, 0);
+    GL30.glOrtho(0, size.x, size.y, 0, 0, 1);
   }
   
 
@@ -122,11 +124,6 @@ public class GL2Batch implements Batch {
     this.w = w;
     this.h = h;
   }
-
-  @Override
-  public void viewport(int x, int y, int w, int h) {
-    GL30.glViewport(x, y, w, h);
-  }
   
   protected Info getInfo(int startTime) {
     if(infoCache.size() > 0) {
@@ -143,9 +140,16 @@ public class GL2Batch implements Batch {
   }
 
   @Override
-  public void draw(float x, float y, float tx, float ty) {
-    GL30.glTexCoord2f(tx, ty);
-    GL30.glVertex2f(x, y);
+  public void draw(double x, double y, double tx, double ty) {
+    //GL30.glTexCoord2f(tx, ty);
+    GL30.glVertex2d(x, y);
+  }
+
+  @Override
+  public void viewport(Viewport vp) {
+    vp.getViewport(pos, size);
+    GL30.glViewport((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
+    Window.getLogger().debug("OpenGL Viewport Change: Pos-"+pos+", Size-"+size);
   }
 
 }

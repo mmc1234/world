@@ -11,26 +11,36 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@ToString
 public class View {
-  public static int getDefaultSize(MeasureSpec spec, LayoutMode mode, int pixelSize, int size, int measureSpec, double ratio) {
-    System.out.println(mode);
+  public static int getDefaultSize(MeasureSpec spec, LayoutMode mode, int pixelSize, int minSize, int measureSpec,
+      double ratio) {
+    if (spec == MeasureSpec.Exactly) {
+      return measureSpec;
+    }
     switch (mode) {
-    case Match:
-      if (spec == MeasureSpec.Unspecified) {
-        return -measureSpec;
-      } else {
-        return -size;
-      }
     case Ratio:
       // Is floating-point loss possible?
       return (int) (measureSpec * ratio);
     case Pixel:
       return pixelSize;
+    case Match:
+      if (spec == MeasureSpec.Unspecified) {
+        return -measureSpec;
+      }
+      // extend warp
     case Wrap:
-      return size;
+      return minSize;
     }
     return 0;
+  }
+
+  public static void setDefaultMeasuredDimension(View view, MeasureSpec spec, int widthMeasureSpec,
+      int heightMeasureSpec) {
+    view.setMeasuredDimension(
+        getDefaultSize(spec, view.getLayoutWidth(), view.width, view.getSuggestedMinimumWidth(), widthMeasureSpec,
+            view.ratioW),
+        getDefaultSize(spec, view.getLayoutHeight(), view.height, view.getSuggestedMinimumHeight(), heightMeasureSpec,
+            view.ratioH));
   }
 
   protected @Setter boolean isFocusable;
@@ -40,8 +50,8 @@ public class View {
   protected Multimap<Class<?>, Object> listenerList;
 
   protected int measuredWidth, measuredHeight;
-  protected int padLeft, padRight, padTop, padBottom;
-  protected double ratioW, ratioH;
+  protected @Setter int padLeft, padRight, padTop, padBottom;
+  protected @Setter double ratioW, ratioH;
   protected @Setter VisibilityType visibility;
 
   protected Window window;
@@ -56,23 +66,23 @@ public class View {
     setLayoutWidth(LayoutMode.Wrap);
     setLayoutHeight(LayoutMode.Wrap);
   }
-  
+
   public void setX(int x) {
-    this.x = x<0?0:x;
+    this.x = x < 0 ? 0 : x;
   }
-  
+
   public void setY(int y) {
-    this.y = y<0?0:y;
+    this.y = y < 0 ? 0 : y;
   }
-  
+
   public void setWidth(int width) {
-    this.width = width <0 ? 0 : width;
+    this.width = width < 0 ? 0 : width;
   }
 
   public void setHeight(int height) {
-    this.height = height <0 ? 0 : height;
+    this.height = height < 0 ? 0 : height;
   }
-  
+
   public final void addListener(Class<?> listenerType, @NonNull Object l) {
     if (listenerType.isAssignableFrom(l.getClass())) {
       listenerList.put(listenerType, l);
@@ -145,12 +155,21 @@ public class View {
     return this;
   }
 
+  public void setPosition(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  public void setSize(int w, int h) {
+    this.width = w;
+    this.height = h;
+  }
+
   protected void onLayout(boolean changed, int left, int right, int top, int bottom) {
   }
 
   protected void onMeasure(MeasureSpec spec, int widthMeasureSpec, int heightMeasureSpec) {
-    setMeasuredDimension(getDefaultSize(spec, getLayoutWidth(), width,  getSuggestedMinimumWidth(), widthMeasureSpec, ratioW),
-        getDefaultSize(spec, getLayoutHeight(), height, getSuggestedMinimumHeight(), heightMeasureSpec, ratioH));
+    setDefaultMeasuredDimension(this, spec, widthMeasureSpec, heightMeasureSpec);
   }
 
   public final void removeListener(Class<?> listenerType, @NonNull Object l) {

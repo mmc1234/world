@@ -2,13 +2,72 @@ package com.github.mmc1234.world.window;
 
 import java.util.ArrayList;
 
-public class ViewGroup extends View {
+import lombok.var;
+
+public class ViewGroup extends View implements ViewTree.OnDrawListener, ViewTree.OnPreDrawListener, ClickListener {
   protected final ArrayList<View> children;
 
   public ViewGroup() {
     children = new ArrayList<View>();
+    this.addListener(ViewTree.OnPreDrawListener.class, this);
+    this.addListener(ViewTree.OnDrawListener.class, this);
+
   }
 
+  @Override
+  public void onDraw(View view, Batch batch) {
+    for (View child : children) {
+      for (ViewTree.OnDrawListener l : child.getListener(ViewTree.OnDrawListener.class)) {
+        l.onDraw(child, batch);
+      }
+    }
+  }
+
+  @Override
+  public void onPreDraw(View view, Batch batch) {
+    for (View child : children) {
+      for (ViewTree.OnPreDrawListener l : child.getListener(ViewTree.OnPreDrawListener.class)) {
+        l.onPreDraw(child, batch);
+      }
+    }
+  }
+
+  @Override
+  public void onCancelClick(View view, Window window) {
+    for (View child : children) {
+      for (var l : child.getListener(ClickListener.class)) {
+        l.onCancelClick(view, window);
+      }
+    }
+  }
+  
+  @Override
+  public void onClickUp(View view, Window window) {
+    for (View child : children) {
+      for (var l : child.getListener(ClickListener.class)) {
+        l.onClickUp(view, window);
+      }
+    }
+  }
+  
+  @Override
+  public void onClickDown(View view, Window window) {
+    for (View child : children) {
+      for (var l : child.getListener(ClickListener.class)) {
+        l.onClickUp(view, window);
+      }
+    }
+  }
+  
+  @Override
+  public void onLongClick(View view, Window window, long time) {
+    for (View child : children) {
+      for (var l : child.getListener(ClickListener.class)) {
+        l.onLongClick(view, window, time);
+      }
+    }
+  }
+  
   @Override
   protected void onAttachedToWindow(Window win) {
     super.onAttachedToWindow(win);
@@ -54,7 +113,7 @@ public class ViewGroup extends View {
     }
     return null;
   }
-  
+
   @Override
   public View onHit(int x, int y) {
     View result = null;

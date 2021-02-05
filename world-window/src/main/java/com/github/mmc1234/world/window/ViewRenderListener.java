@@ -9,10 +9,10 @@ public class ViewRenderListener {
   public void onRender(ViewRenderEvent event) {
     View view = event.getView();
     for(OnPreDrawListener l:view.getListener(OnPreDrawListener.class)) {
-      l.onPreDraw(view);
+      l.onPreDraw(view, event.getBatch());
     }
     for(OnDrawListener l:view.getListener(OnDrawListener.class)) {
-      l.onDraw(view);
+      l.onDraw(view, event.getBatch());
     }
   }
 }

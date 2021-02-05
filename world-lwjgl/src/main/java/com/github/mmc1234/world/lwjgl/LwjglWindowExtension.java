@@ -8,6 +8,7 @@ import org.lwjgl.system.MemoryUtil;
 import com.github.mmc1234.world.window.ActionType;
 import com.github.mmc1234.world.window.ButtonListener;
 import com.github.mmc1234.world.window.ButtonType;
+import com.github.mmc1234.world.window.ClickListener;
 import com.github.mmc1234.world.window.KeyListener;
 import com.github.mmc1234.world.window.PlatformExtension;
 import com.github.mmc1234.world.window.View;
@@ -15,6 +16,7 @@ import com.github.mmc1234.world.window.Window;
 import com.google.common.collect.ImmutableList;
 
 import lombok.Getter;
+import lombok.var;
 
 @Getter
 public class LwjglWindowExtension implements PlatformExtension {
@@ -55,12 +57,26 @@ public class LwjglWindowExtension implements PlatformExtension {
 
   public void handleButton(Window window, ActionType actionType, ButtonType buttonType, int mods) {
     LwjglWindowExtension ext = (LwjglWindowExtension) window.getExtension();
-    View result = window.getFocus();
-    int hx = ext.x, hy = ext.y;
+    View result = window.getLayout();
+    double[] b1 = new double[1];
+    double[] b2 = new double[1];
+    GLFW.glfwGetCursorPos(window.getHandle(), b1, b2);
+    int hx = (int) b1[0], hy = (int) b2[0];
+    
     if (result != null) {
       result = result.hit(hx, hy);
     }
     if (result != null) {
+      System.out.println("x:"+hx+", y:"+hy);
+      if(actionType == ActionType.Release) {
+        for (var l : result.getListener(ClickListener.class)) {
+          l.onClickUp(result, window);
+        }
+      } else if(actionType == ActionType.Press) {
+        for (var l : result.getListener(ClickListener.class)) {
+          l.onClickDown(result, window);
+        }
+      }
       for (ButtonListener l : result.getListener(ButtonListener.class)) {
         l.onButton(result, window, actionType, buttonType, mods, hx, hy);
       }
@@ -107,7 +123,11 @@ public class LwjglWindowExtension implements PlatformExtension {
     }
   }
 
+  int cx, cy;
+  
   public void handleCursorMove(Window window, double xpos, double ypos) {
+    cx = (int) xpos;
+    cy = (int) ypos;
   }
 
   public void handleEnter(Window window, boolean entered) {
