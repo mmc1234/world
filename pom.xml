@@ -130,7 +130,6 @@
     </repository>
   </repositories>
   <modules>
-    <module>world-toolkit</module>
     <module>world-message</module>
     <module>world-window</module>
     <module>world-engine</module>
