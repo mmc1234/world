@@ -149,7 +149,7 @@ public class GL2Batch implements Batch {
   public void viewport(Viewport vp) {
     vp.getViewport(pos, size);
     GL30.glViewport((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
-    Window.getLogger().debug("OpenGL Viewport Change: Pos-"+pos+", Size-"+size);
+    Window.getLogger().debug("Viewport Change: Pos-"+pos+", Size-"+size);
   }
 
 }

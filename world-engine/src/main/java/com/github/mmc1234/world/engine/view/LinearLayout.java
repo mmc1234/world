@@ -34,7 +34,6 @@ public class LinearLayout extends ViewGroup {
     int ox = AlignType.getX(getLayoutAlign(), this.getMeasuredWidth(), Math.abs(right - left));
     int oy = AlignType.getY(getLayoutAlign(), this.getMeasuredHeight(), Math.abs(bottom - top));
     if (changed) {
-      System.out.println(left + ":" + right + ":" + top + ":" + bottom);
       for (View child : children) {
         if (isHorizontal) {
           ox += child.getPadLeft();
@@ -107,7 +106,6 @@ public class LinearLayout extends ViewGroup {
     }
 
     for (View child : children) {
-      // 如果是AtMost模式，那么尝试请求
       if (spec == MeasureSpec.AtMost) {
         if (isVertical()) {
           if (child.getMeasuredHeight() < 0 && child.getMeasuredWidth() != 0) {

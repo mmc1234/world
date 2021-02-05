@@ -33,37 +33,37 @@ public class ViewGroup extends View implements ViewTree.OnDrawListener, ViewTree
   }
 
   @Override
-  public void onCancelClick(View view, Window window) {
+  public void onCancelClick(CancelClickEvent event) {
     for (View child : children) {
       for (var l : child.getListener(ClickListener.class)) {
-        l.onCancelClick(view, window);
+        l.onCancelClick(event);
       }
     }
   }
   
   @Override
-  public void onClickUp(View view, Window window) {
+  public void onClick(ClickEvent event) {
     for (View child : children) {
       for (var l : child.getListener(ClickListener.class)) {
-        l.onClickUp(view, window);
+        l.onClick(event);
       }
     }
   }
   
   @Override
-  public void onClickDown(View view, Window window) {
+  public void onClickDown(ClickDownEvent event) {
     for (View child : children) {
       for (var l : child.getListener(ClickListener.class)) {
-        l.onClickUp(view, window);
+        l.onClickDown(event);
       }
     }
   }
   
   @Override
-  public void onLongClick(View view, Window window, long time) {
+  public void onLongClick(LongClickEvent event) {
     for (View child : children) {
       for (var l : child.getListener(ClickListener.class)) {
-        l.onLongClick(view, window, time);
+        l.onLongClick(event);
       }
     }
   }

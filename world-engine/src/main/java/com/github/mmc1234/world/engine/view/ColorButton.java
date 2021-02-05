@@ -3,7 +3,11 @@ package com.github.mmc1234.world.engine.view;
 import java.awt.Color;
 
 import com.github.mmc1234.world.window.Batch;
+import com.github.mmc1234.world.window.CancelClickEvent;
+import com.github.mmc1234.world.window.ClickDownEvent;
+import com.github.mmc1234.world.window.ClickEvent;
 import com.github.mmc1234.world.window.ClickListener;
+import com.github.mmc1234.world.window.LongClickEvent;
 import com.github.mmc1234.world.window.View;
 import com.github.mmc1234.world.window.ViewTree;
 import com.github.mmc1234.world.window.Window;
@@ -32,20 +36,20 @@ public class ColorButton extends View implements ViewTree.OnDrawListener, ClickL
     batch.end();
   }
   @Override
-  public void onClickUp(View view, Window window) {
+  public void onClick(ClickEvent event) {
     r = (buttonColor.getRed()/255f);
     g = (buttonColor.getGreen()/255f);
     b = (buttonColor.getBlue()/255f);
   }
   @Override
-  public void onClickDown(View view, Window window) {
+  public void onClickDown(ClickDownEvent event) {
     r = 1-(buttonColor.getRed()/255f);
     g = 1-(buttonColor.getGreen()/255f);
     b = 1-(buttonColor.getBlue()/255f);
   }
   @Override
-  public void onCancelClick(View view, Window window) {
+  public void onCancelClick(CancelClickEvent event) {
   }
-  
-  public void onLongClick(View view, Window window, long time) {};
+  @Override
+  public void onLongClick(LongClickEvent event) {};
 }

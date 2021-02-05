@@ -11,6 +11,11 @@ public interface PlatformExtension {
   public void close(Window window);
   public long getHandle();
   public void make();
+  public Icon getIcon();
+  public void setIcon(Icon icon);
+  public Cursor getCursor();
+  public void setSize(int width, int height);
+  public void setPos(int x, int y);
   /**
    * If the window is attached to the current thread, unattach it.
    * */

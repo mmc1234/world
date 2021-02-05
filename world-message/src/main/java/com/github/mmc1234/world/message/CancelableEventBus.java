@@ -34,6 +34,7 @@ public class CancelableEventBus {
       if(method.isAnnotationPresent(CancelableSubscribe.class)) {
         cel.unregister(method.getAnnotation(CancelableSubscribe.class).value(), obj);
       } else if(method.isAnnotationPresent(Subscribe.class)) {
+        System.out.println(method.getParameterTypes()[0]);
         def.unregister(method.getParameterTypes()[0], obj);
       }
     }
@@ -42,7 +43,12 @@ public class CancelableEventBus {
   public void post(Object obj) {
     try {
       if(obj instanceof QueryEvent) {
-        cel.post(((QueryEvent) obj).getEvent().getClass(), obj);
+        QueryEvent event = (QueryEvent) obj;
+        cel.post(event.getEvent().getClass(), obj);
+        // auto post
+        if(!event.getEvent().isCancel()) {
+          def.post(event.getEvent().getClass(), event.getEvent());
+        }
       } else {
         def.post(obj.getClass(), obj);
       }
